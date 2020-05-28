@@ -27,8 +27,9 @@ window.onload = function() {
             data[0].push('result');
             data.slice(1, data.length).forEach(address => {
                 callJusoAPI(address[1], function(e) {
+                    count++;
                     dropArea.textContent = count + '/' + data.length;
-                    if (typeof e.results.juso[0].jibunAddr != 'undefined')
+                    if (typeof e.results.juso[0] != 'undefined')
                         address.push(e.results.juso[0].jibunAddr);
                 });
             });
