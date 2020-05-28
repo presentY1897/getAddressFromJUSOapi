@@ -42,7 +42,8 @@ window.onload = function() {
     var makeResultDownloadButton = function() {
         let csvContent = new Blob([
             new Uint8Array([0xEF, 0xBB, 0xBF]),
-            data.map(row => row.join(',')).join('\n')
+            data.map(row => row.map(col => { if (col.search(',')) return '"' + col + '"'; return col })
+                .join(',')).join('\n')
         ], {
             type: "data:text/csv;charset=utf-8"
         });
