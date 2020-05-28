@@ -1,4 +1,4 @@
-var data
+var data = null;
 window.onload = function() {
     let dropArea = document.getElementById('dragdropdiv');
     let callAjaxButton = document.getElementById('api_start_button');
@@ -6,33 +6,40 @@ window.onload = function() {
     let reader = new this.FileReader();
     var count = 0;
     reader.onload = function() {
-        var rows = reader.result.split('\n');
+        var rows = reader.result.split('\r\n');
         data = rows.map(row => row.split(','));
-        data.forEach(cols => cols.forEach(element => element.split('"').join('')));
+        data.forEach(cols => cols.forEach(element => element.split('"').join('').split('\r\n').join('')));
         dropArea.textContent = '0/' + data.length;
     };
 
     callAjaxButton.onclick = function() {
-        data[0].push('result');
-        data.slice(1, data.length).forEach(address => {
-            callJusoAPI(address[1], function(e) {
-                console.log(count++);
-                dropArea.textContent = count + '/' + data.length;
-                if (typeof e.results.juso[0].jibunAddr != 'undefined')
-                    address.push(e.results.juso[0].jibunAddr);
+        if (data != null) {
+            data[0].push('result');
+            data.slice(1, data.length).forEach(address => {
+                callJusoAPI(address[1], function(e) {
+                    dropArea.textContent = count + '/' + data.length;
+                    if (typeof e.results.juso[0].jibunAddr != 'undefined')
+                        address.push(e.results.juso[0].jibunAddr);
+                });
             });
-        });
+        };
     };
     downloadButton.onclick = function() {
         makeResultDownloadButton();
     };
 
     var makeResultDownloadButton = function() {
-        let csvContent = new Blob([data.map(e => e.join(",")).join("\r\n")], {
+        let csvContent = new Blob([
+            new Uint8Array([0xEF, 0xBB, 0xBF]),
+            data.map(row => row.join(',')).join('\n')
+        ], {
             type: "data:text/csv;charset=utf-8"
         });
         var encodedUri = URL.createObjectURL(csvContent);
-        window.open(encodedUri, '_blank');
+        let forSaveAElement = document.createElement('a');
+        forSaveAElement.href = encodedUri;
+        forSaveAElement.download = 'result.csv';
+        forSaveAElement.click();
     };
 
 
@@ -59,11 +66,9 @@ window.onload = function() {
     };
 
     function uploadFile(file) {
-        let url = 'YOUR URL HERE'
         let formData = new FormData()
 
         formData.append('file', file)
-        console.log(file);
         reader.readAsText(file, "euc-kr");
     };
 
@@ -77,10 +82,16 @@ window.onload = function() {
                 currentpage: 1,
                 countPerPage: 5,
                 resultType: 'json',
-                confmKey: 'devU01TX0FVVEgyMDIwMDUyNzE0MDUyNTEwOTgwMzU=',
+                confmKey: document.getElementById('api_key_input').value,
                 keyword: keyword
             },
-            success: successCallback
+            success: successCallback,
+            error: function(e) {
+                let errorDiv = document.getElementById('errordiv');
+                let p = document.createElement('p');
+                p.innerText = e;
+                errorDiv.append(p);
+            }
         });
     }
 }
