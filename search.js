@@ -7,7 +7,17 @@ window.onload = function() {
     var count = 0;
     reader.onload = function() {
         var rows = reader.result.split('\r\n');
-        data = rows.map(row => row.split(','));
+        data = rows.filter(row => row != "").map(row => {
+            var exceptCol = row.split('"');
+            var col = exceptCol
+                .filter(element => element != "")
+                .map((element, index) => {
+                    if (index % 2 == 0) return element.split(',').filter(e => e != "")
+                    else return element
+                })
+                .reduce((acc, curr) => acc.concat(curr));
+            return col;
+        });
         data.forEach(cols => cols.forEach(element => element.split('"').join('').split('\r\n').join('')));
         dropArea.textContent = '0/' + data.length;
     };
