@@ -1,11 +1,11 @@
 var data = null;
-window.onload = function() {
+window.onload = function () {
     let dropArea = document.getElementById('dragdropdiv');
     let callAjaxButton = document.getElementById('api_start_button');
     let downloadButton = document.getElementById('download_result_button');
     let reader = new this.FileReader();
     var count = 0;
-    reader.onload = function() {
+    reader.onload = function () {
         var rows = reader.result.split('\r\n');
         data = rows.filter(row => row != "").map(row => {
             var exceptCol = row.split('"');
@@ -22,11 +22,11 @@ window.onload = function() {
         dropArea.textContent = '0/' + data.length;
     };
 
-    callAjaxButton.onclick = function() {
+    callAjaxButton.onclick = function () {
         if (data != null) {
             data[0].push('result');
             data.slice(1, data.length).forEach(address => {
-                callJusoAPI(address[1], function(e) {
+                callJusoAPI(address[1], function (e) {
                     count++;
                     dropArea.textContent = count + '/' + data.length;
                     if (typeof e.results.juso[0] != 'undefined')
@@ -35,14 +35,17 @@ window.onload = function() {
             });
         };
     };
-    downloadButton.onclick = function() {
+    downloadButton.onclick = function () {
         makeResultDownloadButton();
     };
 
-    var makeResultDownloadButton = function() {
+    var makeResultDownloadButton = function () {
         let csvContent = new Blob([
             new Uint8Array([0xEF, 0xBB, 0xBF]),
-            data.map(row => row.map(col => { if (col.search(',')) return '"' + col + '"'; return col })
+            data.map(row => row.map(col => {
+                    if (col.search(',')) return '"' + col + '"';
+                    return col
+                })
                 .join(',')).join('\n')
         ], {
             type: "data:text/csv;charset=utf-8"
@@ -98,7 +101,7 @@ window.onload = function() {
                 keyword: keyword
             },
             success: successCallback,
-            error: function(e) {
+            error: function (e) {
                 let errorDiv = document.getElementById('errordiv');
                 let p = document.createElement('p');
                 p.innerText = e;
