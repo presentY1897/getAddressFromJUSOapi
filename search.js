@@ -60,33 +60,31 @@ window.onload = function () {
         })();
     };
 
+    (function stopDropFunction() {
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false)
+        });
 
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-        dropArea.addEventListener(eventName, preventDefaults, false)
-    });
-
-    function preventDefaults(e) {
-        e.preventDefault()
-        e.stopPropagation()
-    };
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        };
+    })();
 
     dropArea.addEventListener('drop', handleDrop, false);
 
     function handleDrop(e) {
-        let dt = e.dataTransfer
-        let files = dt.files
+        let dt = e.dataTransfer;
+        let files = dt.files;
 
-        handleFiles(files)
+        handleFiles(files);
     };
 
     function handleFiles(files) {
-        ([...files]).forEach(uploadFile)
+        ([...files]).forEach(uploadFile);
     };
 
     function uploadFile(file) {
-        let formData = new FormData()
-
-        formData.append('file', file)
         reader.readAsText(file, "euc-kr");
     };
 
