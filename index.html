@@ -9,17 +9,45 @@
 </head>
 
 <body>
-    <div class="container">
-        <div>
-            api key: <input id='api_key_input' />
+    <div class="container-fluid">
+        <div class='row'>
+            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+                <div class="sidebar-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">
+                                <span data-feather="home"></span>
+                                대시보드 <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <span data-feather="file"></span>
+                                파일
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <span data-feather="shopping-cart"></span>
+                                작업
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <main role='main' class='col-md-9 ml-sm-auto col-lg-10 px-md-4'>
+                <div>
+                    api key: <input id='api_key_input' />
 
-            <button id="api_start_button">변환 시작!</button>
-            <button id="download_result_button">다운로드 버튼!</button>
+                    <button id="api_start_button">변환 시작!</button>
+                    <button id="download_result_button">다운로드 버튼!</button>
+                </div>
+                <div id='dragdropdiv'
+                    style='height:200px; background-color: brown; text-align: center; font-size:x-large; color:white; top:50%'>
+                </div>
+                <div id='errordiv'></div>
+            </main>
         </div>
-        <div id='dragdropdiv'
-            style='height:200px; background-color: brown; text-align: center; font-size:x-large; color:white; top:50%'>
-        </div>
-        <div id='errordiv'></div>
     </div>
 
     <!-- bootstrap 관련 -->
