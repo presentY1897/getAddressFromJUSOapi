@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <div class="container-fluid">
+    <div class="container-lg">
         <div class='row'>
             <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
                 <div class="sidebar-sticky pt-3">
@@ -21,7 +21,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                               파일
+                                파일
                             </a>
                         </li>
                         <li class="nav-item">
@@ -33,21 +33,26 @@
                 </div>
             </nav>
             <main role='main' class='col-md-9 ml-sm-auto col-lg-10 px-md-4'>
-                <div id='dashboard_page' class="container-fluid">
+                <div id='dashboard_page' class="container-lg">
                     <div class='page-header'>
                         <h1>대시 보드 창</h1>
                         <p>분석 과정 나중에 추가함</p>
                     </div>
                 </div>
-                <div id='fileupload_page' class='container-fluid'>
+                <div id='fileupload_page' class='container-lg'>
                     <div class='page-header'>
                         <h1>파일 관리</h1>
                     </div>
-                    <div>
-                        <button id='fileupload_button' type='button' class='btn btn-dark'>업로드</button>
+                    <div class="row">
+                        <div class="col-auto mr-auto">
+                            <span id="upload_file_name"></span>
+                        </div>
+                        <div class="col-auto">
+                            <button id='fileupload_button' type='button' class='btn btn-dark'>업로드</button>
+                        </div>
                     </div>
                 </div>
-                <div id='work_page' class='container-fluid'>
+                <div id='work_page' class='container-lg'>
                     <div class='page-header'>
                         <h1>변환 관리</h1>
                     </div>
