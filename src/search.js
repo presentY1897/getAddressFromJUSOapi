@@ -1,6 +1,5 @@
 var data = null;
 window.onload = function() {
-    let fileDataController = {};
 
     let dropArea = document.getElementById('dragdropdiv');
     let callAjaxButton = document.getElementById('api_start_button');
