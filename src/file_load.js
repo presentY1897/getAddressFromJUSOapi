@@ -1,9 +1,13 @@
 let fileDataController = {
-    files: []
+    files: [],
+    currentFile: null
 };
 (() => {
     class File {
-        constructor(raw) {
+        constructor(name) {
+            this.name = name;
+        }
+        setRawData(raw) {
             this.raw = raw;
         }
         makePreviewRows(length = 20) {
@@ -24,8 +28,8 @@ let fileDataController = {
     }
     let reader = new this.FileReader();
     reader.onload = function() {
-        let file = new File(reader.result);
-        fileDataController.files.push(file);
+        let file = fileDataController.currentFile;
+        file.setRawData(reader.result)
         file.makePreviewRows();
         setDataPreviewTable(file.previewData);
     };
@@ -34,9 +38,12 @@ let fileDataController = {
         $('#inputFile').on('change', (e) => {
             var fileName = $(e.target).val();
             $(e.target).next('.custom-file-label').html(fileName);
-
-            tempFileData = {};
-            ([...$('#inputFile')[0].files]).forEach(file => reader.readAsText(file, "euc-kr"));
+            ([...$('#inputFile')[0].files]).forEach(uploadFile => {
+                let file = new File(uploadFile.name);
+                fileDataController.files.push(file);
+                fileDataController.currentFile = file;
+                reader.readAsText(uploadFile, "euc-kr");
+            });
         });
     })();
 
@@ -93,4 +100,16 @@ let fileDataController = {
             })
         })();
     };
+
+    $('#acceptFile').on('click', () => {
+        let file = fileDataController.currentFile;
+        if (file != null) {
+            var fileListElement = document.createElement('li');
+            fileListElement.setAttribute('class', 'list-group-item');
+            fileListElement.dataset.file = file;
+            fileListElement.innerText = file.name;
+
+            $('#upload_file_list')[0].append(fileListElement);
+        };
+    });
 })();
