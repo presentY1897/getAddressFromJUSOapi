@@ -1,7 +1,6 @@
 var data = null;
 window.onload = function() {
 
-    let dropArea = document.getElementById('dragdropdiv');
     let callAjaxButton = document.getElementById('api_start_button');
     let downloadButton = document.getElementById('download_result_button');
     var count = 0;
@@ -42,34 +41,6 @@ window.onload = function() {
             forSaveAElement.download = 'result.csv';
             forSaveAElement.click();
         })();
-    };
-
-    (function stopDropFunction() {
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropArea.addEventListener(eventName, preventDefaults, false)
-        });
-
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        };
-    })();
-
-    dropArea.addEventListener('drop', handleDrop, false);
-
-    function handleDrop(e) {
-        let dt = e.dataTransfer;
-        let files = dt.files;
-
-        handleFiles(files);
-    };
-
-    function handleFiles(files) {
-        ([...files]).forEach(uploadFile);
-    };
-
-    function uploadFile(file) {
-        reader.readAsText(file, "euc-kr");
     };
 
     function callJusoAPI(keyword, successCallback) {
