@@ -12,7 +12,7 @@ let fileDataController = {
         setRawData(raw) {
             this.raw = raw;
         }
-        makePreviewRows(length = 20) {
+        makePreviewRows(length = 20, isFirstHeader = false) {
             let rows = this.raw.split('\r\n');
             let data = rows.slice(0, length).filter(row => row != "").map(row => {
                 var col = row.split('"')
@@ -26,13 +26,18 @@ let fileDataController = {
             });
             data.forEach(cols => cols.forEach(element => element.split('"').join('').split('\r\n').join('')));
             this.previewData = data;
+            if (isFirstHeader) {
+                this.previewData.header = data.splice(0, 1)[0];
+                this.isFirstHeader = true;
+                this.header = this.previewData.header;
+            }
         }
     }
     let reader = new this.FileReader();
     reader.onload = function() {
         let file = fileDataController.currentFile;
         file.setRawData(reader.result)
-        file.makePreviewRows();
+        file.makePreviewRows(21, true);
         setDataPreviewTable(file.previewData);
     };
 
@@ -84,7 +89,11 @@ let fileDataController = {
             Array.from({
                 length: column_count
             }, (_, index) => {
-                tr.append(makeThAndAppend('#' + index, 'col'));
+                if (data.header == undefined) {
+                    tr.append(makeThAndAppend('#' + index, 'col'));
+                } else {
+                    tr.append(makeThAndAppend(data.header[index], 'col'));
+                }
             });
         })();
 
