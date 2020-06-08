@@ -1,11 +1,13 @@
 let fileDataController = {
     files: [],
-    currentFile: null
+    currentFile: null,
+    isCurrentFile: function(checkFile) { if (this.currentFile == checkFile) return true; return false; }
 };
 (() => {
     class File {
-        constructor(name) {
+        constructor(name, type = 'uploaded') {
             this.name = name;
+            this.type = type;
         }
         setRawData(raw) {
             this.raw = raw;
@@ -36,6 +38,11 @@ let fileDataController = {
 
     (function setupInputFileChange() {
         $('#inputFile').on('change', (e) => {
+            (function removeBeforeUploadedFile() {
+                fileDataController.files = fileDataController.files.map(file => file.type != 'uploaded');
+                if (fileDataController.currentFile != null && fileDataController.currentFile.type == 'uploaded') fileDataController.currentFile = null;
+            })();
+
             var fileName = $(e.target).val();
             $(e.target).next('.custom-file-label').html(fileName);
             ([...$('#inputFile')[0].files]).forEach(uploadFile => {
@@ -102,14 +109,34 @@ let fileDataController = {
     };
 
     $('#acceptFile').on('click', () => {
-        let file = fileDataController.currentFile;
-        if (file != null) {
+        if (fileDataController.currentFile != null) {
+            let file =
+                (function copyNewFileFromUploadedFile() {
+                    let newFile = Object.assign({}, fileDataController.currentFile);
+                    newFile.type = 'accepted';
+                    fileDataController.files.push(newFile);
+                    fileDataController.currentFile = newFile;
+                    return newFile;
+                })();
+
             var fileListElement = document.createElement('li');
             fileListElement.setAttribute('class', 'list-group-item');
             fileListElement.dataset.file = file;
             fileListElement.innerText = file.name;
 
+            $(fileListElement).addClass('active');
             $('#upload_file_list')[0].append(fileListElement);
+
+            $(fileListElement).on('click', () => {
+                let currentFile = fileListElement.dataset.file;
+                if (fileDataController.currentFile == currentFile) {
+                    $(fileListElement).removeClass('active');
+                    fileDataController.currentFile = null;
+                } else {
+                    $(fileListElement).addClass('active');
+                    fileDataController.currentFile = currentFile;
+                };
+            });
         };
     });
 })();
