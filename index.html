@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <div class="container-lg">
+    <div class="container-lg" ondragstart="event.stopPropagation(); return false;">
         <div class='row'>
             <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
                 <div class="sidebar-sticky pt-3">
@@ -76,7 +76,7 @@
                         <div class='col'>
                             <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
                             <label class="form-check-label" for="defaultCheck1">
-                            주소 값 취득
+                            위치 값 취득
                             </label>
                         </div>
                     </div>
@@ -86,10 +86,10 @@
                         </div>
                         <input id='api_key_input' class='form-control' />
                     </div>
-                </div>
-                <div>
-                    <button id="api_start_button">변환 시작!</button>
-                    <button id="download_result_button">다운로드 버튼!</button>
+                    <div>
+                        <button id="api_start_button" type='button' class='btn btn-secondary btn-lg'>변환 시작!</button>
+                        <button id="download_result_button" type='button' class='btn btn-secondary btn-lg'>다운로드 버튼!</button>
+                    </div>
                 </div>
             </main>
         </div>
