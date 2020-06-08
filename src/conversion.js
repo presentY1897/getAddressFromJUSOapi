@@ -1,14 +1,15 @@
 (() => {
     $('#api_start_button').on('click', () => {
         var conversionSelect = $('#conversionSelector').val();
+        fileDataController.currentFile.makeFullRow(); // todo: 한꺼번에 하자
         let data = fileDataController.currentFile.data;
         let isCallPositionApi = document.getElementById('positionApiCallCheck').checked;
+        let apiKey = $('#api_key_input').val();
         switch (conversionSelect) {
             default: if (data == null) {
                     break;
                 };
             data[0].push('result');
-            let apiKey = $('#api_key_input').val();
 
             if (isCallPositionApi) {
                 data[0].push('positionX');
