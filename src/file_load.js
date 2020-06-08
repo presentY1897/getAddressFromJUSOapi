@@ -3,43 +3,44 @@ let fileDataController = {
     currentFile: null,
     isCurrentFile: function(checkFile) { if (this.currentFile == checkFile) return true; return false; }
 };
-(() => {
-    class File {
-        constructor(name, type = 'uploaded') {
-            this.name = name;
-            this.type = type;
-        }
-        setRawData(raw) {
-            this.raw = raw;
-        }
-        _makeRowData(length) {
-            this.raw.split('\r\n').slice(0, length).filter(row => row != "").map(row => {
-                var col = row.split('"')
-                    .filter(element => element != "")
-                    .map((element, index) => {
-                        if (index % 2 == 0) return element.split(',').filter(e => e != "")
-                        else return element
-                    })
-                    .reduce((acc, curr) => acc.concat(curr));
-                data.forEach(cols => cols.forEach(element => element.split('"').join('').split('\r\n').join('')));
-                return col;
-            });
-        }
-        makePreviewRows(length = 20, isFirstHeader = false) {
-            let data = _makeRowData(length);
-            this.previewData = data;
-            if (isFirstHeader) {
-                this.previewData.header = data.splice(0, 1)[0];
-                this.isFirstHeader = true;
-                this.header = this.previewData.header;
-            }
-        }
-        makeFullRow() {
-            let data = _makeRowData(undefined);
-            this.data = data;
-            if (this.isFirstHeader) this.header = data.splice(0, 1)[0];
+class File {
+    constructor(name, type = 'uploaded') {
+        this.name = name;
+        this.type = type;
+    }
+    setRawData(raw) {
+        this.raw = raw;
+    }
+    _makeRowData(length) {
+        let data = this.raw.split('\r\n').slice(0, length).filter(row => row != "").map(row => {
+            var col = row.split('"')
+                .filter(element => element != "")
+                .map((element, index) => {
+                    if (index % 2 == 0) return element.split(',').filter(e => e != "")
+                    else return element
+                })
+                .reduce((acc, curr) => acc.concat(curr));
+            return col;
+        });
+        data.forEach(cols => cols.forEach(element => element.split('"').join('').split('\r\n').join('')));
+        return data;
+    }
+    makePreviewRows(length = 20, isFirstHeader = false) {
+        let data = this._makeRowData(length);
+        this.previewData = data;
+        if (isFirstHeader) {
+            this.previewData.header = data.splice(0, 1)[0];
+            this.isFirstHeader = true;
+            this.header = this.previewData.header;
         }
     }
+    makeFullRow() {
+        let data = this._makeRowData(undefined);
+        this.data = data;
+        if (this.isFirstHeader) this.header = data.splice(0, 1)[0];
+    }
+}
+(() => {
     let reader = new this.FileReader();
     reader.onload = function() {
         let file = fileDataController.currentFile;
@@ -128,7 +129,7 @@ let fileDataController = {
         if (fileDataController.currentFile != null) {
             let file =
                 (function copyNewFileFromUploadedFile() {
-                    let newFile = Object.assign({}, fileDataController.currentFile);
+                    let newFile = Object.assign(new File(), fileDataController.currentFile);
                     newFile.type = 'accepted';
                     fileDataController.files.push(newFile);
                     fileDataController.currentFile = newFile;
