@@ -12,9 +12,8 @@ let fileDataController = {
         setRawData(raw) {
             this.raw = raw;
         }
-        makePreviewRows(length = 20, isFirstHeader = false) {
-            let rows = this.raw.split('\r\n');
-            let data = rows.slice(0, length).filter(row => row != "").map(row => {
+        _makeRowData(length) {
+            this.raw.split('\r\n').slice(0, length).filter(row => row != "").map(row => {
                 var col = row.split('"')
                     .filter(element => element != "")
                     .map((element, index) => {
@@ -22,15 +21,23 @@ let fileDataController = {
                         else return element
                     })
                     .reduce((acc, curr) => acc.concat(curr));
+                data.forEach(cols => cols.forEach(element => element.split('"').join('').split('\r\n').join('')));
                 return col;
             });
-            data.forEach(cols => cols.forEach(element => element.split('"').join('').split('\r\n').join('')));
+        }
+        makePreviewRows(length = 20, isFirstHeader = false) {
+            let data = _makeRowData(length);
             this.previewData = data;
             if (isFirstHeader) {
                 this.previewData.header = data.splice(0, 1)[0];
                 this.isFirstHeader = true;
                 this.header = this.previewData.header;
             }
+        }
+        makeFullRow() {
+            let data = _makeRowData(undefined);
+            this.data = data;
+            if (this.isFirstHeader) this.header = data.splice(0, 1)[0];
         }
     }
     let reader = new this.FileReader();

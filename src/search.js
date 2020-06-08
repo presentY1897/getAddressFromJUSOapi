@@ -42,27 +42,4 @@ window.onload = function() {
             forSaveAElement.click();
         })();
     };
-
-    function callJusoAPI(keyword, successCallback) {
-        $.ajax({
-            url: 'http://www.juso.go.kr/addrlink/addrLinkApiJsonp.do',
-            type: 'POST',
-            dataType: 'jsonp',
-            crossDomain: true,
-            data: {
-                currentpage: 1,
-                countPerPage: 5,
-                resultType: 'json',
-                confmKey: document.getElementById('api_key_input').value,
-                keyword: keyword
-            },
-            success: successCallback,
-            error: function(e) {
-                let errorDiv = document.getElementById('errordiv');
-                let p = document.createElement('p');
-                p.innerText = e;
-                errorDiv.append(p);
-            }
-        });
-    }
 }
