@@ -4,7 +4,8 @@
         fileDataController.currentFile.makeFullRow(); // todo: 한꺼번에 하자
         let data = fileDataController.currentFile.data;
         let isCallPositionApi = document.getElementById('positionApiCallCheck').checked;
-        let apiKey = $('#api_key_input').val();
+        let addressApiKey = $('#address_api_key_input').val();
+        let positionApiKey = $('#position_api_key_input').val();
         switch (conversionSelect) {
             default: if (data == null) {
                     break;
@@ -23,7 +24,7 @@
                             currentpage: 1,
                             countPerPage: 1,
                             resultType: 'json',
-                            confmKey: apiKey,
+                            confmKey: addressApiKey,
                             keyword: address[1]
                         },
                         e => {
@@ -37,7 +38,7 @@
                                         udrtYn: result.udrtYn,
                                         buldMnnm: result.buldMnnm,
                                         buldSlno: result.buldSlno,
-                                        confmKey: apiKey,
+                                        confmKey: positionApiKey,
                                         resultType: 'json'
                                     },
                                     e => {
@@ -56,7 +57,7 @@
                             currentpage: 1,
                             countPerPage: 1,
                             resultType: 'json',
-                            confmKey: apiKey,
+                            confmKey: addressApiKey,
                             keyword: address[1]
                         },
                         e => {
@@ -70,7 +71,7 @@
                                         udrtYn: result.udrtYn,
                                         buldMnnm: result.buldMnnm,
                                         buldSlno: result.buldSlno,
-                                        confmKey: apiKey,
+                                        confmKey: positionApiKey,
                                         resultType: 'json'
                                     },
                                     e => {

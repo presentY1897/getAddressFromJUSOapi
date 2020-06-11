@@ -82,9 +82,15 @@
                     </div>
                     <div class='input-group'>
                         <div class='input-group-prepend'>
-                            <span class='input-group-text'>api key</span>
+                            <span class='input-group-text'>주소 변환 API KEY</span>
                         </div>
-                        <input id='api_key_input' class='form-control' />
+                        <input id='address_api_key_input' class='form-control' />
+                    </div>
+                    <div id='positionApiGroup' class='input-group' style='display: none;'>
+                        <div class='input-group-prepend'>
+                            <span class='input-group-text'>좌표 취득 API KEY</span>
+                        </div>
+                        <input id='position_api_key_input' class='form-control' />
                     </div>
                     <div>
                         <button id="api_start_button" type='button' class='btn btn-secondary btn-lg'>변환 시작!</button>

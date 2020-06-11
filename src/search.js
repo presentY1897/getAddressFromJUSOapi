@@ -5,6 +5,14 @@ window.onload = function() {
     let downloadButton = document.getElementById('download_result_button');
     var count = 0;
 
+    $('#positionApiCallCheck').on('change', () => {
+        if ($('#positionApiCallCheck').prop('checked')) {
+            $('#positionApiGroup').css('display', '');
+        } else {
+            $('#positionApiGroup').css('display', 'none');
+        }
+    });
+
     callAjaxButton.onclick = function() {
         if (data != null) {
             data[0].push('result');
