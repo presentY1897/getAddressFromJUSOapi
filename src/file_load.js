@@ -1,7 +1,10 @@
 let fileDataController = {
     files: [],
     currentFile: null,
-    isCurrentFile: function(checkFile) { if (this.currentFile == checkFile) return true; return false; }
+    isCurrentFile: function (checkFile) {
+        if (this.currentFile == checkFile) return true;
+        return false;
+    }
 };
 class File {
     constructor(name, type = 'uploaded') {
@@ -42,7 +45,7 @@ class File {
 }
 (() => {
     let reader = new this.FileReader();
-    reader.onload = function() {
+    reader.onload = function () {
         let file = fileDataController.currentFile;
         file.setRawData(reader.result)
         file.makePreviewRows(21, true);
@@ -67,11 +70,11 @@ class File {
         });
     })();
 
-    var initializeTable = function() {
+    var initializeTable = function () {
         var table = $('#selected_file_table');
         table.empty();
     }
-    var setDataPreviewTable = function(data) {
+    var setDataPreviewTable = function (data) {
         initializeTable();
         var table = $('#selected_file_table');
         let column_count;
