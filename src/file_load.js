@@ -1,10 +1,7 @@
 let fileDataController = {
     files: [],
     currentFile: null,
-    isCurrentFile: function (checkFile) {
-        if (this.currentFile == checkFile) return true;
-        return false;
-    }
+    isCurrentFile: checkFile => this.currentFile == checkFile
 };
 class File {
     constructor(name, type = 'uploaded') {
@@ -15,16 +12,17 @@ class File {
         this.raw = raw;
     }
     _makeRowData(length) {
-        let data = this.raw.split('\r\n').slice(0, length).filter(row => row != "").map(row => {
-            var col = row.split('"')
+        let data = this.raw
+            .split('\r\n').slice(0, length)
+            .filter(row => row != "").map(row =>
+                row.split('"')
                 .filter(element => element != "")
                 .map((element, index) => {
                     if (index % 2 == 0) return element.split(',').filter(e => e != "")
                     else return element
                 })
-                .reduce((acc, curr) => acc.concat(curr));
-            return col;
-        });
+                .reduce((acc, curr) => acc.concat(curr))
+            );
         data.forEach(cols => cols.forEach(element => element.split('"').join('').split('\r\n').join('')));
         return data;
     }
@@ -59,8 +57,6 @@ class File {
                 if (fileDataController.currentFile != null && fileDataController.currentFile.type == 'uploaded') fileDataController.currentFile = null;
             })();
 
-            var fileName = $(e.target).val();
-            $(e.target).next('.custom-file-label').html(fileName);
             ([...$('#inputFile')[0].files]).forEach(uploadFile => {
                 let file = new File(uploadFile.name);
                 fileDataController.files.push(file);
