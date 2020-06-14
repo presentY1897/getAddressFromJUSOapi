@@ -126,6 +126,7 @@ class File {
 
     $('#acceptFile').on('click', () => {
         if (fileDataController.currentFile != null) {
+            initializeTable();
             let file =
                 (function copyNewFileFromUploadedFile() {
                     let newFile = Object.assign(new File(), fileDataController.currentFile);
@@ -141,6 +142,7 @@ class File {
             fileListElement.innerText = file.name;
 
             $(fileListElement).addClass('active');
+            $('#upload_file_list').children().each((_, target) => $(target).removeClass('active'));
             $('#upload_file_list')[0].append(fileListElement);
 
             $(fileListElement).on('click', () => {
@@ -149,6 +151,7 @@ class File {
                     $(fileListElement).removeClass('active');
                     fileDataController.currentFile = null;
                 } else {
+                    $('#upload_file_list').children().each((_, target) => $(target).removeClass('active'));
                     $(fileListElement).addClass('active');
                     fileDataController.currentFile = currentFile;
                 };
