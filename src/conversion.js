@@ -16,7 +16,12 @@
                 type: 'doughnut',
                 data: {
                     datasets: [{
-                        data: [data.length, 0, 0]
+                        data: [data.length, 0, 0],
+                        backgroundColor: [
+                            'rgba(89, 44, 28, 1)',
+                            'rgba(205, 217, 199, 1)',
+                            'rgba(92, 115, 57, 1)'
+                        ]
                     }],
 
                     // These labels appear in the legend and in the tooltips when hovering different arcs
@@ -28,7 +33,7 @@
                 },
                 options: {}
             });
-            chartDataUpdate = function (data) {
+            chartDataUpdate = function(data) {
                 data.forEach((element, index) => {
                     chart.data.datasets[0].data[index] = element;
                 });
@@ -94,7 +99,7 @@
             crossDomain: true,
             data: data,
             success: successCallback,
-            error: function (e) {}
+            error: function(e) {}
         });
     }
 })();
