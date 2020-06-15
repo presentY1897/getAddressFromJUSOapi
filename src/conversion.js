@@ -9,6 +9,34 @@
 
         if (data == null) return false;
 
+        let chartDataUpdate;
+        (function createStatusChart() {
+            var chartCanvas = document.getElementById('chart');
+            var chart = new Chart(chartCanvas, {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [data.length, 0, 0]
+                    }],
+
+                    // These labels appear in the legend and in the tooltips when hovering different arcs
+                    labels: [
+                        '남은 데이터',
+                        '분석 중',
+                        '변환 완료'
+                    ]
+                },
+                options: {}
+            });
+            chartDataUpdate = function (data) {
+                data.forEach((element, index) => {
+                    chart.data.datasets[0].data[index] = element;
+                });
+                chart.update();
+            }
+        })();
+
+        var count = 0;
         (function callApiByAjax() {
             data[0].push('result');
 
@@ -27,6 +55,9 @@
                         keyword: address[1]
                     },
                     e => {
+                        count++;
+                        chartDataUpdate([data.length - count, 0, count]);
+                        console.log(count);
                         if (typeof e.results.juso[0] != 'undefined') {
                             if (conversionSelect == '도로명찾기') address.push(e.results.juso[0].roadAddr);
                             else if (conversionSelect == '주소찾기') address.push(e.results.juso[0].jibunAddr);
