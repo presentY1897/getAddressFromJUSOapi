@@ -4,7 +4,8 @@
 <head>
     <meta charset='UTF-8'>
     <title>JUSO.API를 활용한 주소 변환</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 </head>
 
 <body>
@@ -13,17 +14,17 @@
             <nav id="sidebarMenu" class="col-md-3 col-lg-2 bg-light">
                 <div class="sidebar-sticky pt-3">
                     <ul class="nav flex-column">
-                        <li class="nav-item">
+                        <li class="nav-item dashboardTab">
                             <a class="nav-link active" href="#">
                                 대시보드
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item fileUploadTab">
                             <a class="nav-link" href="#">
                                 파일
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item workTab">
                             <a class="nav-link" href="#">
                                 작업
                             </a>
@@ -38,7 +39,7 @@
                         <canvas id="chart" width='100' height="100"></canvas>
                     </div>
                 </div>
-                <div id='fileupload_page' class='container-lg'>
+                <div id='fileupload_page' class='container-lg d-none'>
                     <div class='page-header'>
                         <h1>파일 관리</h1>
                     </div>
@@ -61,7 +62,7 @@
                         </div>
                     </div>
                 </div>
-                <div id='work_page' class='container-lg'>
+                <div id='work_page' class='container-lg d-none'>
                     <div class='page-header'>
                         <h1>변환 관리</h1>
                     </div>
@@ -94,8 +95,8 @@
                     </div>
                     <div>
                         <button id="api_start_button" type='button' class='btn btn-secondary btn-lg'>변환 시작!</button>
-                        <button id="download_result_button" type='button' class='btn btn-secondary btn-lg'>다운로드
-                            버튼!</button>
+                        <button id="download_result_button" type='button'
+                            class='btn btn-secondary btn-lg'>다운로드!</button>
                     </div>
                 </div>
             </main>
@@ -103,14 +104,17 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
     </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
     <script src='src/search.js'></script>
     <script src='src/file_load.js'></script>
     <script src='src/conversion.js'></script>
+    <script src='src/page.js'></script>
 </body>
 
 </html>
