@@ -4,6 +4,12 @@
 
 [도로명 주소 api](http://www.juso.go.kr/addrlink/devAddrLinkRequestUse.do?menu=main&cPath=99JA)를 이용하여 **지번주소를 도로명주소로 변환**하거나 **도로명주소를 지번주소로 변환**합니다. 부수적으로 변환과정에서 **위치좌표를 취득**할 수 있습니다. 입력한 데이터는 개인 PC에서만 활용되며 ***분석하기 위해 선택한 주소 컬럼만*** 도로명주소 서버로 넘어갑니다. 아직은 **csv파일**과 **utf-8BOM** 인코딩 파일만 지원합니다.
 
+#### 사용 기술 스택
+
+ui/ux: bootstrap
+
+기능: ECMAScript 2016
+
 ## 다운로드
 
 사이트 우측 상단의 code를 선택하고 Download ZIP으로 전체 소스를 받으시거나, [다운로드](https://github.com/presentY1897/getAddressFromJUSOapi/archive/master.zip) 링크를 클릭하여 압축된 파일을 받아주세요.
