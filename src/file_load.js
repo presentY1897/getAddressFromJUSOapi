@@ -138,14 +138,13 @@ class File {
 
             var fileListElement = document.createElement('li');
             fileListElement.setAttribute('class', 'list-group-item');
-            fileListElement.dataset.file = file;
             fileListElement.innerText = file.name;
+            file.htmlElement = fileListElement;
 
             $(fileListElement).addClass('active');
             $('#upload_file_list').children().each((_, target) => $(target).removeClass('active'));
             $('#upload_file_list')[0].append(fileListElement);
-
-            $(fileListElement).on('click', () => {
+            var elementClickEvent = function () {
                 let currentFile = fileListElement.dataset.file;
                 if (fileDataController.currentFile == currentFile) {
                     $(fileListElement).removeClass('active');
@@ -155,7 +154,21 @@ class File {
                     $(fileListElement).addClass('active');
                     fileDataController.currentFile = currentFile;
                 };
-            });
+
+                var changeAsColumns = function (columns) {
+                    var comboBox = document.getElementById('targetColumnDropdown');
+                    var createColumnElement = function (name, idx) {
+                        var element = document.createElement('a');
+                        element.classList.add('dropdown-item');
+                        element.innerText = +idx + '. ' + name;
+                        element.dataset.id = idx;
+                        return element;
+                    };
+                    columns.forEach((column, idx) => comboBox.appendChild(createColumnElement(column, idx)));
+                };
+                changeAsColumns(file.previewData.header);
+            }
+            $(fileListElement).on('click', elementClickEvent);
         };
     });
 })();

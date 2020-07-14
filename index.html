@@ -94,6 +94,16 @@
                         <input id='position_api_key_input' class='form-control' />
                     </div>
                     <div>
+                        <div class='dropdown'>
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                분석할 컬럼
+                            </button>
+                            <div id='targetColumnDropdown' class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
                         <button id="api_start_button" type='button' class='btn btn-secondary btn-lg'>변환 시작!</button>
                         <button id="download_result_button" type='button'
                             class='btn btn-secondary btn-lg'>다운로드!</button>
