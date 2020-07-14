@@ -9,11 +9,13 @@ var bindingTabViewing = function () {
         tabClassName: 'workTab',
         viewPageId: 'work_page'
     }];
-    tabAndViewRelation.forEach(element => {
-        [...document.getElementsByClassName(element.tabClassName)].forEach(tab => tab.addEventListener('click', e => {
+    var hideComapreNotTargetElement = function (target) {
+        tabAndViewRelation.forEach(compare => compare != target ? document.getElementById(compare.viewPageId).classList.add('d-none') : null);
+    };
+    tabAndViewRelation.forEach(element => [...document.getElementsByClassName(element.tabClassName)]
+        .forEach(tab => tab.addEventListener('click', _ => {
             var targetPage = document.getElementById(element.viewPageId);
-            tabAndViewRelation.forEach(compare => compare != tab ? document.getElementById(compare.viewPageId).classList.add('d-none') : null);
             targetPage.classList.remove('d-none');
-        }));
-    })
+            hideComapreNotTargetElement(element);
+        })))
 }();
