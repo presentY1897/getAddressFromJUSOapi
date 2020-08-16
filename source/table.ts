@@ -12,12 +12,12 @@ class table {
         return input.map(line => line.split(embracer));
     }
     private splitAsDelimiter(input: string[][], delimiter: string): string[][] {
-        return input.map(line =>
-            line.map((element, index) => {
+        return input.map(line => line
+            .map((element, index) => {
                 if (index % 2 == 0) return element.split(delimiter).filter(e => e != "")
                 else return [element]
             })
-                .reduce((acc, curr) => acc.concat(curr)));
+            .reduce((acc, curr) => acc.concat(curr)));
     }
     makeRows({ input, delimiter, endOfLine, embracer, maxLineCount = undefined }:
         { input: string; delimiter: string; endOfLine: string; embracer: string; maxLineCount: number | undefined }) {
