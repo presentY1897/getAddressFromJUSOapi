@@ -1,15 +1,19 @@
 import { table } from './table';
 
 class csvFile {
-    name: string;
-    path: string;
-    raw: string;
+    file: File;
+    name: string
+    raw: string = '';
     data: table | null = null;
 
-    constructor(params: { name: string, path: string, raw: string }) {
-        this.name = params.name;
-        this.path = params.path;
-        this.raw = params.raw;
+    constructor(params: { file: File, encoding: string }) {
+        this.file = params.file;
+        this.name = this.file.name;
+        const reader = new FileReader();
+        reader.onload = () => {
+            this.raw = reader.result as string;
+        }
+        reader.readAsText(params.file, params.encoding);
     }
 }
 
