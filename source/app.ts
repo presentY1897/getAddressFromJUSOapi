@@ -14,14 +14,9 @@ let fileInputReact: (file: File) => void = function (file) {
 };
 let fileInputElementEvent: (this: HTMLInputElement, ev: Event) => void = function (_) {
     (function removeFileControllerTarget() { inputFileController.targetFile = null })();
-
-    if (fileInputElement.files !== null) {
-        [...fileInputElement.files].forEach(fileInputReact)
-    }
+    (function insertFileWhenInputFileIsNotNull() { fileInputElement.files !== null ? [...fileInputElement.files].forEach(fileInputReact) : null });
 };
 
 (function initFileInputEvent() {
-    if (fileInputElement !== null) {
-        fileInputElement.addEventListener('change', fileInputElementEvent)
-    }
+    fileInputElement !== null ? fileInputElement.addEventListener('change', fileInputElementEvent) : null;
 })();
