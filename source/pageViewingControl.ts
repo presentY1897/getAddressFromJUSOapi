@@ -26,7 +26,7 @@ class pageViewController {
                 }))
         )
     }
-}
+};
 
 let pageViewControl = new pageViewController(
     [new tabPage('dashboardTab', 'dashboard_page'),

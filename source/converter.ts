@@ -13,6 +13,6 @@ class converter {
     do() {
         this.conversionFunc(this.target);
     }
-}
+};
 
 export { converter };

@@ -25,6 +25,6 @@ class table {
         let preRows = this.splitAsEmbracer(lines, embracer);
         this.rows = this.splitAsDelimiter(preRows, delimiter);
     }
-}
+};
 
 export { table };

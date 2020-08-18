@@ -6,6 +6,6 @@ class tabPage {
         this.tabClassName = tabClassName;
         this.viewPageId = viewPageId;
     }
-}
+};
 
 export { tabPage };

@@ -14,6 +14,6 @@ class fileController {
     clearFiles() {
         this.files = [];
     }
-}
+};
 
 export { fileController };

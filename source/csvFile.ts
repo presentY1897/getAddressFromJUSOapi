@@ -15,6 +15,6 @@ class csvFile {
         }
         reader.readAsText(params.file, params.encoding);
     }
-}
+};
 
 export { csvFile };
