@@ -1,6 +1,6 @@
 import { table } from './table';
 
-class file {
+class csvFile {
     name: string;
     path: string;
     raw: string;
@@ -13,4 +13,4 @@ class file {
     }
 }
 
-export { file };
+export { csvFile };

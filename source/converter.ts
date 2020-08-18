@@ -1,12 +1,11 @@
-import { table } from './table';
-import { file } from './file';
+import { csvFile } from './csvFile';
 // 인터페이스로 구현해야할 거 같음.
 
 class converter {
-    target: file;
+    target: csvFile;
     conversionFunc: Function;
 
-    constructor(file: file, conversionFunc: Function) {
+    constructor(file: csvFile, conversionFunc: Function) {
         this.target = file;
         this.conversionFunc = conversionFunc;
     }
