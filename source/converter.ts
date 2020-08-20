@@ -1,4 +1,4 @@
-import { csvFile } from './csvFile';
+import { csvFile } from './file/csvFile';
 // 인터페이스로 구현해야할 거 같음.
 
 class converter {

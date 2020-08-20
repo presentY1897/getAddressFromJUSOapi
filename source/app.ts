@@ -1,5 +1,5 @@
 import { fileController } from './fileController';
-import { csvFile } from './csvFile';
+import { csvFile } from './file/csvFile';
 
 let inputFileController = new fileController();
 

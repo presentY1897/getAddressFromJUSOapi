@@ -1,4 +1,4 @@
-import { csvFile } from './csvFile';
+import { csvFile } from './file/csvFile';
 
 class fileController {
     files: csvFile[] = [];
