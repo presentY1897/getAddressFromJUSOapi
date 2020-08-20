@@ -3,8 +3,12 @@ import { fileHtmlElement } from './file/fileHTMLElement';
 class fileHtmlElementController {
     private elementList: fileHtmlElement[] = [];
     targetElement: fileHtmlElement | null = null;
-    fileListElementId = 'upload_file_list';
+    private fileListElementId: string;
     private listElement: HTMLUListElement = document.getElementById(this.fileListElementId) as HTMLUListElement;
+
+    constructor(fileListElementId: string) {
+        this.fileListElementId = fileListElementId;
+    }
 
     appendFile(fileParam: { file: import("./file/csvFile").csvFile; setStyleFunc: () => void | undefined; setBindingClickEvent: () => void | undefined; }) {
         let htmlElement = new fileHtmlElement(fileParam);
