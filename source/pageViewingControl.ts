@@ -28,12 +28,4 @@ class pageViewController {
     }
 };
 
-let pageViewControl = new pageViewController(
-    [new tabPage('dashboardTab', 'dashboard_page'),
-    new tabPage('fileUploadTab', 'fileupload_page'),
-    new tabPage('workTab', 'work_page')],
-    (target: { classList: { add: (arg0: string) => any; }; }) => target.classList.add('d-none'),
-    (target: { classList: { remove: (arg0: string) => any; }; }) => target.classList.remove('d-none')
-)
-
-pageViewControl.bindingSelectTabShowPage();
+export { pageViewController };

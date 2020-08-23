@@ -1,5 +1,7 @@
 import { fileController } from './fileController';
 import { csvFile } from './file/csvFile';
+import { pageViewController } from './pageViewingControl';
+import { tabPage } from './pageView/tabPage';
 
 let inputFileController = new fileController();
 
@@ -20,3 +22,14 @@ let fileInputElementEvent: (this: HTMLInputElement, ev: Event) => void = functio
 (function initFileInputEvent() {
     fileInputElement !== null ? fileInputElement.addEventListener('change', fileInputElementEvent) : null;
 })();
+
+
+let pageViewControl = new pageViewController(
+    [new tabPage('dashboardTab', 'dashboard_page'),
+    new tabPage('fileUploadTab', 'fileupload_page'),
+    new tabPage('workTab', 'work_page')],
+    (target: { classList: { add: (arg0: string) => any; }; }) => target.classList.add('d-none'),
+    (target: { classList: { remove: (arg0: string) => any; }; }) => target.classList.remove('d-none')
+)
+
+pageViewControl.bindingSelectTabShowPage();
