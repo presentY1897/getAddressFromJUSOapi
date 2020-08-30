@@ -8,12 +8,13 @@ let inputFileController = new fileController();
 let fileEncoding = 'euc-kr';
 let fileInputId = 'inputFile';
 let fileInputElement: HTMLInputElement = document.getElementById(fileInputId) as HTMLInputElement;
+let fileInputNameElement: HTMLLabelElement = document.querySelector('.custom-file-label') as HTMLLabelElement;
 
 let fileInputReact: (value: File, index: number, array: File[]) => void = function (file) {
     let inputFile = new csvFile({ file: file, encoding: fileEncoding });
     inputFileController.addFile(inputFile);
     inputFileController.targetFile = inputFile;
-    fileInputElement.innerText = file.name;
+    fileInputNameElement.innerText = file.name;
 };
 let fileInputElementEvent: (this: HTMLInputElement, ev: Event) => void = function (_) {
     (function removeFileControllerTarget() { inputFileController.targetFile = null })();
