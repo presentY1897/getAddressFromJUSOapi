@@ -3,7 +3,7 @@ import { fileHtmlElement } from './file/fileHTMLElement';
 class fileHtmlElementController {
     private elementList: fileHtmlElement[] = [];
     targetElement: fileHtmlElement | null = null;
-    private fileListElementId: string;
+    private fileListElementId: string = '';
     private listElement: HTMLUListElement = document.getElementById(this.fileListElementId) as HTMLUListElement;
 
     constructor(fileListElementId: string) {
