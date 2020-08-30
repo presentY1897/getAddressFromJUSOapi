@@ -25,7 +25,6 @@ let fileInputElementEvent: (this: HTMLInputElement, ev: Event) => void = functio
     fileInputElement !== null ? fileInputElement.addEventListener('change', fileInputElementEvent) : null;
 })();
 
-
 let pageViewControl = new pageViewController(
     [
         new tabPage('dashboardTab', 'dashboard_page'),
