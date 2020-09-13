@@ -3,12 +3,12 @@ import { csvFile } from './file/csvFile';
 import { pageViewController } from './pageViewingControl';
 import { tabPage } from './pageView/tabPage';
 
-let inputFileController = new fileController();
+const inputFileController = new fileController();
 
-let fileEncoding = 'euc-kr';
-let fileInputId = 'inputFile';
-let fileInputElement: HTMLInputElement = document.getElementById(fileInputId) as HTMLInputElement;
-let fileInputNameElement: HTMLLabelElement = document.querySelector('.custom-file-label') as HTMLLabelElement;
+const fileEncoding = 'euc-kr';
+const fileInputId = 'inputFile';
+const fileInputElement: HTMLInputElement = document.getElementById(fileInputId) as HTMLInputElement;
+const fileInputNameElement: HTMLLabelElement = document.querySelector('.custom-file-label') as HTMLLabelElement;
 
 let fileInputReact: (value: File, index: number, array: File[]) => void = function (file) {
     let inputFile = new csvFile({ file: file, encoding: fileEncoding });
