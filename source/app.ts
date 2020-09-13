@@ -2,6 +2,7 @@ import { fileController } from './fileController';
 import { csvFile } from './file/csvFile';
 import { pageViewController } from './pageViewingControl';
 import { tabPage } from './pageView/tabPage';
+import { tableViewer } from './tableViewer';
 
 const inputFileController = new fileController();
 
@@ -21,8 +22,26 @@ let fileInputElementEvent: (this: HTMLInputElement, ev: Event) => void = functio
     (function insertFileWhenInputFileIsNotNull() { fileInputElement.files !== null ? [...fileInputElement.files].forEach(fileInputReact) : null })();
 };
 
+const fileOkayButtonId = 'acceptFile';
+const fileInputOkayButton: HTMLButtonElement = document.getElementById(fileOkayButtonId) as HTMLButtonElement;
+const fileOkayEvent: (this: HTMLButtonElement, ev: Event) => void = function (_) {
+    if (inputFileController.targetFile !== null) {
+        inputFileController.targetFile.makeTable({ header: '', isIncludeHeader: true, delimiter: ',', endOfLine: '\n', embracer: '"', maxLineCount: 20 });
+        tableViewElement.set(inputFileController.targetFile.data);
+        tableViewElement.show();
+    };
+};
 (function initFileInputEvent() {
     fileInputElement !== null ? fileInputElement.addEventListener('change', fileInputElementEvent) : null;
+    fileInputOkayButton !== null ? fileInputOkayButton.addEventListener('click', fileOkayEvent) : null;
+})();
+let tableViewElement: tableViewer;
+(function initTableViewer() {
+    tableViewElement = new tableViewer(
+        document.getElementById('selected_file_table') as HTMLDivElement,
+        (element: HTMLElement) => { element.classList.remove('d-none'); },
+        (element: HTMLElement) => { element.classList.add('d-none'); }
+    );
 })();
 
 let pageViewControl = new pageViewController(
