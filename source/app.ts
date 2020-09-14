@@ -26,7 +26,9 @@ const fileOkayButtonId = 'acceptFile';
 const fileInputOkayButton: HTMLButtonElement = document.getElementById(fileOkayButtonId) as HTMLButtonElement;
 const fileOkayEvent: (this: HTMLButtonElement, ev: Event) => void = function (_) {
     if (inputFileController.targetFile !== null) {
-        inputFileController.targetFile.makeTable({ header: '', isIncludeHeader: true, delimiter: ',', endOfLine: '\n', embracer: '"', maxLineCount: 20 });
+        const header = inputFileController.targetFile.raw.split('\n')[0];
+        const maxLineCount = 10;
+        inputFileController.targetFile.makeTable({ header: header, isIncludeHeader: true, delimiter: ',', endOfLine: '\n', embracer: '"', maxLineCount: maxLineCount });
         tableViewElement.set(inputFileController.targetFile.data);
         tableViewElement.show();
     };
