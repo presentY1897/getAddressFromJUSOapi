@@ -48,6 +48,7 @@ class tableViewer {
     }
     set(table: table) {
         this.dataTable = table;
+        this.containerElement.innerHTML = '';
         this.buildContainer();
         this.buildColumn(table.columns);
         this.buildRows(table.rows);
