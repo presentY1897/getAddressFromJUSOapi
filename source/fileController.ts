@@ -12,7 +12,10 @@ class fileController {
     private makeElement(file: csvFile, type: string, clickCallback: (file: csvFile) => void) {
         let fileElement = document.createElement(type);
         fileElement.innerText = file.name;
-        fileElement.addEventListener('click', () => { clickCallback(file); });
+        fileElement.addEventListener('click', () => {
+            this.targetFile = file;
+            clickCallback(file);
+        });
         return fileElement;
     }
 
