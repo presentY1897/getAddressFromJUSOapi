@@ -4,16 +4,28 @@ import { pageViewController } from './pageViewingControl';
 import { tabPage } from './pageView/tabPage';
 import { tableViewer } from './tableViewer';
 
-const inputFileController = new fileController();
+const inputFileController = new fileController(document.getElementById('upload_file_list') as HTMLElement);
 
 const fileEncoding = 'euc-kr';
 const fileInputId = 'inputFile';
 const fileInputElement: HTMLInputElement = document.getElementById(fileInputId) as HTMLInputElement;
 const fileInputNameElement: HTMLLabelElement = document.querySelector('.custom-file-label') as HTMLLabelElement;
 
+const fileClickEvent: (file: csvFile) => void = function (file) {
+    const targetColumnSelectElement = document.getElementById('targetColumnDropdown');
+    targetColumnSelectElement !== null ? targetColumnSelectElement.innerHTML = '' : null;
+    file.data.columns.forEach((column, idx) => {
+        var element = document.createElement('a');
+        element.classList.add('dropdown-item');
+        element.innerText = column;
+        element.dataset.id = idx.toString();
+        targetColumnSelectElement !== null ? targetColumnSelectElement.appendChild(element) : null;
+    })
+}
+
 let fileInputReact: (value: File, index: number, array: File[]) => void = function (file) {
-    let inputFile = new csvFile({ file: file, encoding: fileEncoding });
-    inputFileController.addFile(inputFile);
+    let inputFile = new csvFile({ file: file, encoding: fileEncoding, clickEvent: fileClickEvent });
+    inputFileController.addFile(inputFile, 'li');
     inputFileController.targetFile = inputFile;
     fileInputNameElement.innerText = file.name;
 };

@@ -1,4 +1,5 @@
 import { table } from './table';
+import { fileHtmlElement } from './fileHTMLElement';
 
 class csvFile {
     file: File;
@@ -6,9 +7,11 @@ class csvFile {
     raw: string = '';
     data: table = new table();
 
-    constructor(params: { file: File, encoding: string }) {
+    clickEvent: (file: csvFile) => void
+    constructor(params: { file: File, encoding: string, clickEvent: (file: csvFile) => void }) {
         this.file = params.file;
         this.name = this.file.name;
+        this.clickEvent = params.clickEvent;
         const reader = new FileReader();
         reader.onload = () => {
             this.raw = reader.result as string;
