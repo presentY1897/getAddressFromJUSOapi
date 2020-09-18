@@ -79,11 +79,13 @@ let tableViewElement: tableViewer;
             .then(data => row[resultColumnNum] = data.results.juso[0][conversionColumn]);
     }
 
-    document.getElementById('api_start_button')?.addEventListener('click', () => {
-        let apiKey = document.getElementById('address_api_key_input')?.innerText as string;
+    const okayButton = document.getElementById('api_start_button');
+    if (okayButton !== null) okayButton.addEventListener('click', () => {
+        const apiKeyInput = document.getElementById('address_api_key_input');
+        let apiKey = apiKeyInput !== null ? apiKeyInput.innerText as string : '';
         let file = inputFileController.targetFile;
 
-        if (apiKey !== undefined && file !== null) {
+        if (apiKey !== '' && file !== null) {
             let jusoConversionFunction = function (file: csvFile) {
                 let targetColumnIdx = 1;
                 let resultColumnIdx = 3;
