@@ -92,7 +92,10 @@ let tableViewElement: tableViewer;
 
         if (apiKey !== '' && file !== null) {
             let jusoConversionFunction = function (file: csvFile) {
-                let targetColumnIdx = 1;
+                const targetColumnSelectElement = document.getElementById('targetColumnDropdown');
+                let targetColumnIdx = 1; // initialize must be changed
+                if (targetColumnSelectElement !== null && targetColumnSelectElement.dataset.id !== undefined)
+                    targetColumnIdx = parseInt(targetColumnSelectElement.dataset.id);
                 let resultColumnIdx = file.data.columns.length + 1;
                 file.data.rows.forEach(row => {
                     if (row.length - 1 < resultColumnIdx) row.push('');
