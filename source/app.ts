@@ -3,6 +3,7 @@ import { csvFile } from './file/csvFile';
 import { pageViewController } from './pageViewingControl';
 import { tabPage } from './pageView/tabPage';
 import { tableViewer } from './tableViewer';
+import { converter } from './converter';
 
 const inputFileController = new fileController(document.getElementById('upload_file_list') as HTMLElement);
 
@@ -57,6 +58,45 @@ let tableViewElement: tableViewer;
         (element: HTMLElement) => { element.classList.add('d-none'); }
     );
 })();
+
+(function initConverter() {
+    const coversionFunction = function (apikey: string, row: string[], targetColumnNum: number, resultColumnNum: number, conversionColumn: string) {
+        const getUrl = 'http://www.juso.go.kr/addrlink/addrLinkApiJsonp.do';
+
+        let formData = new FormData();
+        formData.append('currentpage', '1');
+        formData.append('countPerPage', '1');
+        formData.append('dataType', 'jsonp');
+        formData.append('resultType', 'json');
+        formData.append('confmKey', apikey);
+        formData.append('keyword', row[targetColumnNum]);
+        fetch(getUrl, {
+            method: 'POST',
+            body: formData
+        }).then(response => response.text())
+            .then(result => result.slice(1, result.length - 1))
+            .then(result => JSON.parse(result))
+            .then(data => row[resultColumnNum] = data.results.juso[0][conversionColumn]);
+    }
+
+    document.getElementById('api_start_button')?.addEventListener('click', () => {
+        let apiKey = document.getElementById('address_api_key_input')?.innerText as string;
+        let file = inputFileController.targetFile;
+
+        if (apiKey !== undefined && file !== null) {
+            let jusoConversionFunction = function (file: csvFile) {
+                let targetColumnIdx = 1;
+                let resultColumnIdx = 3;
+                file.data.rows.forEach(row => {
+                    if (row.length - 1 < resultColumnIdx) row.push('');
+                    coversionFunction(apiKey, row, targetColumnIdx, resultColumnIdx, 'jibunAddr');
+                });
+            };
+            let jusoCoverter = new converter(file, jusoConversionFunction);
+            jusoCoverter.do();
+        }
+    });
+})
 
 let pageViewControl = new pageViewController(
     [
