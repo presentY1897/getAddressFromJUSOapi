@@ -20,6 +20,11 @@ const fileClickEvent: (file: csvFile) => void = function (file) {
         element.classList.add('dropdown-item');
         element.innerText = column;
         element.dataset.id = idx.toString();
+        element.addEventListener('click', () => {
+            targetColumnSelectElement !== null ? targetColumnSelectElement.dataset.id = idx.toString() : null;
+            const conversionColumnNameElement = document.getElementById('dropdownMenuButton');
+            conversionColumnNameElement !== null ? conversionColumnNameElement.innerText = column : null;
+        });
         targetColumnSelectElement !== null ? targetColumnSelectElement.appendChild(element) : null;
     })
 }
@@ -88,7 +93,7 @@ let tableViewElement: tableViewer;
         if (apiKey !== '' && file !== null) {
             let jusoConversionFunction = function (file: csvFile) {
                 let targetColumnIdx = 1;
-                let resultColumnIdx = 3;
+                let resultColumnIdx = file.data.columns.length + 1;
                 file.data.rows.forEach(row => {
                     if (row.length - 1 < resultColumnIdx) row.push('');
                     coversionFunction(apiKey, row, targetColumnIdx, resultColumnIdx, 'jibunAddr');
