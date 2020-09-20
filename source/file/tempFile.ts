@@ -1,11 +1,13 @@
 import { table } from './table';
+import { classFile } from './classFile';
 
-class tempFile {
+class tempFile extends classFile {
     name: string
     data: table = new table();
 
-    clickEvent: (file: tempFile) => void
-    constructor(params: { name: string, encoding: string, clickEvent: (file: tempFile) => void }) {
+    clickEvent: (file: classFile) => void
+    constructor(params: { name: string, encoding: string, clickEvent: (file: classFile) => void }) {
+        super(params.name);
         this.name = params.name;
         this.clickEvent = params.clickEvent;
     }

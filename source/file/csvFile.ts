@@ -1,13 +1,15 @@
 import { table } from './table';
+import { classFile } from './classFile';
 
-class csvFile {
+class csvFile extends classFile {
     file: File;
     name: string
     raw: string = '';
     data: table = new table();
 
-    clickEvent: (file: csvFile) => void
-    constructor(params: { file: File, encoding: string, clickEvent: (file: csvFile) => void }) {
+    clickEvent: (file: classFile) => void
+    constructor(params: { file: File, encoding: string, clickEvent: (file: classFile) => void }) {
+        super(params.file.name);
         this.file = params.file;
         this.name = this.file.name;
         this.clickEvent = params.clickEvent;

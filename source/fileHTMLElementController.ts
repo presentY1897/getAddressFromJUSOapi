@@ -10,7 +10,7 @@ class fileHtmlElementController {
         this.fileListElementId = fileListElementId;
     }
 
-    appendFile(fileParam: { file: import("./file/csvFile").csvFile; setStyleFunc: () => void | undefined; setBindingClickEvent: () => void | undefined; }) {
+    appendFile(fileParam: { file: import("./file/classFile").classFile; setStyleFunc: () => void | undefined; setBindingClickEvent: () => void | undefined; }) {
         let htmlElement = new fileHtmlElement(fileParam);
         this.targetElement = htmlElement;
 

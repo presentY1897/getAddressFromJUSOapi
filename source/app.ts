@@ -1,5 +1,7 @@
 import { fileController } from './fileController';
+import { classFile } from './file/classFile';
 import { csvFile } from './file/csvFile';
+import { tempFile } from './file/tempFile'
 import { pageViewController } from './pageViewingControl';
 import { tabPage } from './pageView/tabPage';
 import { tableViewer } from './tableViewer';
@@ -12,7 +14,7 @@ const fileInputId = 'inputFile';
 const fileInputElement: HTMLInputElement = document.getElementById(fileInputId) as HTMLInputElement;
 const fileInputNameElement: HTMLLabelElement = document.querySelector('.custom-file-label') as HTMLLabelElement;
 
-const fileClickEvent: (file: csvFile) => void = function (file) {
+const fileClickEvent: (file: classFile) => void = function (file) {
     const targetColumnSelectElement = document.getElementById('targetColumnDropdown');
     targetColumnSelectElement !== null ? targetColumnSelectElement.innerHTML = '' : null;
     file.data.columns.forEach((column, idx) => {
@@ -91,7 +93,7 @@ let tableViewElement: tableViewer;
         let file = inputFileController.targetFile;
 
         if (apiKey !== '' && file !== null) {
-            let jusoConversionFunction = function (file: csvFile) {
+            let jusoConversionFunction = function (file: classFile) {
                 const targetColumnSelectElement = document.getElementById('targetColumnDropdown');
                 let targetColumnIdx = 1; // initialize must be changed
                 if (targetColumnSelectElement !== null && targetColumnSelectElement.dataset.id !== undefined)
@@ -102,7 +104,8 @@ let tableViewElement: tableViewer;
                     coversionFunction(apiKey, row, targetColumnIdx, resultColumnIdx, 'jibunAddr');
                 });
             };
-            let jusoCoverter = new converter(file, jusoConversionFunction);
+            let newFile = new tempFile({ name: file.name, encoding: fileEncoding, clickEvent: fileClickEvent })
+            let jusoCoverter = new converter(newFile, jusoConversionFunction);
             jusoCoverter.do();
         }
     });

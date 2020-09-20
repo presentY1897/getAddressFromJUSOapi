@@ -1,10 +1,10 @@
-import { csvFile } from './csvFile';
+import { classFile } from './classFile';
 
 class fileHtmlElement {
-    targetFile: csvFile;
+    targetFile: classFile;
     element: HTMLLIElement;
 
-    constructor(param: { file: csvFile, setStyleFunc: () => void | undefined, setBindingClickEvent: () => void | undefined }) {
+    constructor(param: { file: classFile, setStyleFunc: () => void | undefined, setBindingClickEvent: () => void | undefined }) {
         this.targetFile = param.file;
         this.element = document.createElement('li');
         this.element.innerText = param.file.name;
