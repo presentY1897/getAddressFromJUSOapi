@@ -1,5 +1,4 @@
 import { table } from './table';
-import { fileHtmlElement } from './fileHTMLElement';
 
 class csvFile {
     file: File;
