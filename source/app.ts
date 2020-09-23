@@ -8,6 +8,7 @@ import { tableViewer } from './tableViewer';
 import { converter } from './converter';
 
 const inputFileController = new fileController(document.getElementById('upload_file_list') as HTMLElement);
+const outputFileController = new fileController(document.getElementById('analysis_file_list') as HTMLElement);
 
 const fileEncoding = 'euc-kr';
 const fileInputId = 'inputFile';
@@ -29,6 +30,9 @@ const fileClickEvent: (file: classFile) => void = function (file) {
         });
         targetColumnSelectElement !== null ? targetColumnSelectElement.appendChild(element) : null;
     })
+
+    tableViewElement.set(file.data);
+    tableViewElement.show();
 }
 
 let fileInputReact: (value: File, index: number, array: File[]) => void = function (file) {
@@ -46,11 +50,9 @@ const fileOkayButtonId = 'acceptFile';
 const fileInputOkayButton: HTMLButtonElement = document.getElementById(fileOkayButtonId) as HTMLButtonElement;
 const fileOkayEvent: (this: HTMLButtonElement, ev: Event) => void = function (_) {
     if (inputFileController.targetFile !== null) {
-        const header = inputFileController.targetFile.raw.split('\n')[0];
+        const header = (inputFileController.targetFile as csvFile).raw.split('\n')[0];
         const maxLineCount = 10;
-        inputFileController.targetFile.makeTable({ header: header, isIncludeHeader: true, delimiter: ',', endOfLine: '\n', embracer: '"', maxLineCount: maxLineCount });
-        tableViewElement.set(inputFileController.targetFile.data);
-        tableViewElement.show();
+        (inputFileController.targetFile as csvFile).makeTable({ header: header, isIncludeHeader: true, delimiter: ',', endOfLine: '\n', embracer: '"', maxLineCount: maxLineCount });
     };
 };
 (function initFileInputEvent() {
@@ -67,7 +69,7 @@ let tableViewElement: tableViewer;
 })();
 
 (function initConverter() {
-    const coversionFunction = function (apikey: string, row: string[], targetColumnNum: number, resultColumnNum: number, conversionColumn: string) {
+    const coversionFunction = async function (apikey: string, row: string[], targetColumnNum: number, resultColumnNum: number, conversionColumn: string) {
         const getUrl = 'http://www.juso.go.kr/addrlink/addrLinkApiJsonp.do';
 
         let formData = new FormData();
@@ -77,20 +79,20 @@ let tableViewElement: tableViewer;
         formData.append('resultType', 'json');
         formData.append('confmKey', apikey);
         formData.append('keyword', row[targetColumnNum]);
-        fetch(getUrl, {
+        await fetch(getUrl, {
             method: 'POST',
             body: formData
         }).then(response => response.text())
             .then(result => result.slice(1, result.length - 1))
             .then(result => JSON.parse(result))
-            .then(data => row[resultColumnNum] = data.results.juso[0][conversionColumn]);
+            .then(data => row[resultColumnNum] = data.results.juso !== null && data.results.juso.length > 0 ? data.results.juso[0][conversionColumn] : '');
     }
 
     const okayButton = document.getElementById('api_start_button');
     if (okayButton !== null) okayButton.addEventListener('click', () => {
-        const apiKeyInput = document.getElementById('address_api_key_input');
-        let apiKey = apiKeyInput !== null ? apiKeyInput.innerText as string : '';
-        let file = inputFileController.targetFile;
+        const apiKeyInput = document.getElementById('address_api_key_input') as HTMLInputElement;
+        let apiKey = apiKeyInput !== null ? apiKeyInput.value as string : '';
+        let file = inputFileController.targetFile as csvFile;
 
         if (apiKey !== '' && file !== null) {
             let jusoConversionFunction = function (file: classFile) {
@@ -98,18 +100,23 @@ let tableViewElement: tableViewer;
                 let targetColumnIdx = 1; // initialize must be changed
                 if (targetColumnSelectElement !== null && targetColumnSelectElement.dataset.id !== undefined)
                     targetColumnIdx = parseInt(targetColumnSelectElement.dataset.id);
-                let resultColumnIdx = file.data.columns.length + 1;
-                file.data.rows.forEach(row => {
+                let resultColumnIdx = file.data.columns.length - 1;
+                file.data.rows.forEach(async row => {
                     if (row.length - 1 < resultColumnIdx) row.push('');
-                    coversionFunction(apiKey, row, targetColumnIdx, resultColumnIdx, 'jibunAddr');
+                    await coversionFunction(apiKey, row, targetColumnIdx, resultColumnIdx, 'jibunAddr');
                 });
             };
-            let newFile = new tempFile({ name: file.name, encoding: fileEncoding, clickEvent: fileClickEvent })
+            let newFile = new tempFile({ name: file.name, encoding: fileEncoding, clickEvent: fileClickEvent });
+            outputFileController.addFile(newFile, 'li');
+
+            const header = file.raw.split('\n')[0];
+            newFile.data = file.makeTable({ header: header, isIncludeHeader: true, delimiter: ',', endOfLine: '\n', embracer: '"', maxLineCount: file.raw.split('\n').length - 1 });
+            newFile.data.columns.push('result');
             let jusoCoverter = new converter(newFile, jusoConversionFunction);
             jusoCoverter.do();
         }
     });
-})
+})();
 
 let pageViewControl = new pageViewController(
     [
