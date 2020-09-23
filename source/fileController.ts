@@ -1,15 +1,15 @@
-import { csvFile } from './file/csvFile';
+import { classFile } from './file/classFile';
 
 class fileController {
-    files: csvFile[] = [];
-    targetFile: csvFile | null = null;
+    files: classFile[] = [];
+    targetFile: classFile | null = null;
     element: HTMLElement;
 
     constructor(element: HTMLElement) {
         this.element = element;
     }
 
-    private makeElement(file: csvFile, type: string, clickCallback: (file: csvFile) => void) {
+    private makeElement(file: classFile, type: string, clickCallback: (file: classFile) => void) {
         let fileElement = document.createElement(type);
         fileElement.classList.add('list-group-item');
         fileElement.innerText = file.name;
@@ -20,11 +20,11 @@ class fileController {
         return fileElement;
     }
 
-    addFile(file: csvFile, type: string) {
+    addFile(file: classFile, type: string) {
         this.files.push(file);
         this.element.appendChild(this.makeElement(file, type, file.clickEvent));
     }
-    removeSelectFile(file: csvFile) {
+    removeSelectFile(file: classFile) {
         var selectedFileIdx = this.files.findIndex(_file => _file == file);
         selectedFileIdx != -1 ? this.files.splice(selectedFileIdx, 1) : null;
     }
