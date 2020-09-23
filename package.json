@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "### 개요",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "@types/chart.js": "^2.9.24",
+    "chart.js": "^2.9.3"
+  },
   "devDependencies": {
     "babel-loader": "^8.1.0",
     "webpack": "^4.44.1",

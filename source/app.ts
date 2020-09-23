@@ -6,6 +6,7 @@ import { pageViewController } from './pageViewingControl';
 import { tabPage } from './pageView/tabPage';
 import { tableViewer } from './tableViewer';
 import { converter } from './converter';
+import { chartContainer } from './chart/chartContainer';
 
 const inputFileController = new fileController(document.getElementById('upload_file_list') as HTMLElement);
 const outputFileController = new fileController(document.getElementById('analysis_file_list') as HTMLElement);
@@ -68,6 +69,7 @@ let tableViewElement: tableViewer;
     );
 })();
 
+const progressChartCont = new chartContainer('chart');
 (function initConverter() {
     const coversionFunction = async function (apikey: string, row: string[], targetColumnNum: number, resultColumnNum: number, conversionColumn: string) {
         const getUrl = 'http://www.juso.go.kr/addrlink/addrLinkApiJsonp.do';
@@ -79,13 +81,17 @@ let tableViewElement: tableViewer;
         formData.append('resultType', 'json');
         formData.append('confmKey', apikey);
         formData.append('keyword', row[targetColumnNum]);
+        progressChartCont.addOnProgress();
         await fetch(getUrl, {
             method: 'POST',
             body: formData
         }).then(response => response.text())
             .then(result => result.slice(1, result.length - 1))
             .then(result => JSON.parse(result))
-            .then(data => row[resultColumnNum] = data.results.juso !== null && data.results.juso.length > 0 ? data.results.juso[0][conversionColumn] : '');
+            .then(data => {
+                row[resultColumnNum] = data.results.juso !== null && data.results.juso.length > 0 ? data.results.juso[0][conversionColumn] : '';
+                progressChartCont.addOnComplete();
+            });
     }
 
     const okayButton = document.getElementById('api_start_button');
@@ -96,6 +102,8 @@ let tableViewElement: tableViewer;
 
         if (apiKey !== '' && file !== null) {
             let jusoConversionFunction = function (file: classFile) {
+                progressChartCont.dataUpdate([file.data.rows.length, 0, 0, 0]);
+
                 const targetColumnSelectElement = document.getElementById('targetColumnDropdown');
                 let targetColumnIdx = 1; // initialize must be changed
                 if (targetColumnSelectElement !== null && targetColumnSelectElement.dataset.id !== undefined)
