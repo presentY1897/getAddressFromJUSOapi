@@ -71,7 +71,7 @@ let tableViewElement: tableViewer;
 
 const progressChartCont = new chartContainer('chart');
 (function initConverter() {
-    const coversionFunction = async function (apikey: string, row: string[], targetColumnNum: number, resultColumnNum: number, conversionColumn: string) {
+    const coversionFunction = function (apikey: string, row: string[], targetColumnNum: number, resultColumnNum: number, conversionColumn: string) {
         const getUrl = 'http://www.juso.go.kr/addrlink/addrLinkApiJsonp.do';
 
         let formData = new FormData();
@@ -82,7 +82,7 @@ const progressChartCont = new chartContainer('chart');
         formData.append('confmKey', apikey);
         formData.append('keyword', row[targetColumnNum]);
         progressChartCont.addOnProgress();
-        await fetch(getUrl, {
+        return fetch(getUrl, {
             method: 'POST',
             body: formData
         }).then(response => response.text())
@@ -109,10 +109,30 @@ const progressChartCont = new chartContainer('chart');
                 if (targetColumnSelectElement !== null && targetColumnSelectElement.dataset.id !== undefined)
                     targetColumnIdx = parseInt(targetColumnSelectElement.dataset.id);
                 let resultColumnIdx = file.data.columns.length - 1;
-                file.data.rows.forEach(async row => {
-                    if (row.length - 1 < resultColumnIdx) row.push('');
-                    await coversionFunction(apiKey, row, targetColumnIdx, resultColumnIdx, 'jibunAddr');
-                });
+                const stackDividCount = 100;
+                file.data.rows.reduce((acc: string[][][], curr: string[], idx: number): string[][][] => {
+                    idx % stackDividCount == 0 ? acc.push([[]]) : '';
+                    const lastAcc = acc[acc.length - 1];
+                    lastAcc.push(curr);
+                    return acc;
+                }, []).reduce(async (prePromise: Promise<unknown>, stack: string[][]) => {
+                    return await prePromise.then(() => new Promise(resolve => {
+                        console.log('check');
+                        const completeResolve = resolve;
+                        let resolveCheckCount = 0;
+                        stack.map(async row => await new Promise(async resolve => {
+                            if (row.length - 1 < resultColumnIdx) row.push('');
+                            await coversionFunction(apiKey, row, targetColumnIdx, resultColumnIdx, 'jibunAddr').then(_ => {
+                                console.log('is resolved?');
+                                resolve();
+                                resolveCheckCount++;
+                                if (resolveCheckCount === stackDividCount)
+                                    completeResolve();
+                            });
+                        }));
+                        console.log('end');
+                    }));
+                }, Promise.resolve());
             };
             let newFile = new tempFile({ name: file.name, encoding: fileEncoding, clickEvent: fileClickEvent });
             outputFileController.addFile(newFile, 'li');
