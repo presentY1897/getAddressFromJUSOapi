@@ -119,6 +119,7 @@ const progressChartCont = new chartContainer('chart');
                     return await prePromise.then(() => new Promise(resolve => {
                         const completeResolve = resolve;
                         let resolveCheckCount = 0;
+                        // maybe await not needed;
                         stack.map(async row => await new Promise(async resolve => {
                             if (row.length - 1 < resultColumnIdx) row.push('');
                             await coversionFunction(apiKey, row, targetColumnIdx, resultColumnIdx, 'jibunAddr').then(_ => {
