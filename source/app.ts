@@ -71,7 +71,7 @@ let tableViewElement: tableViewer;
 
 const progressChartCont = new chartContainer('chart');
 (function initConverter() {
-    const coversionFunction = function (apikey: string, row: string[], targetColumnNum: number, resultColumnNum: number, conversionColumn: string) {
+    const jibunCoversionFunction = function (apikey: string, row: string[], targetColumnNum: number, resultColumnNum: number, conversionColumn: string) {
         const getUrl = 'http://www.juso.go.kr/addrlink/addrLinkApiJsonp.do';
 
         let formData = new FormData();
@@ -92,7 +92,29 @@ const progressChartCont = new chartContainer('chart');
                 row[resultColumnNum] = data.results.juso !== null && data.results.juso.length > 0 ? data.results.juso[0][conversionColumn] : '';
                 progressChartCont.addOnComplete();
             });
-    }
+    };
+    const roadConversionFunction = function (apikey: string, row: string[], targetColumnNum: number, resultColumnNum: number, conversionColumn: string) {
+        const getUrl = 'http://www.juso.go.kr/addrlink/addrLinkApiJsonp.do';
+
+        let formData = new FormData();
+        formData.append('currentpage', '1');
+        formData.append('countPerPage', '1');
+        formData.append('dataType', 'jsonp');
+        formData.append('resultType', 'json');
+        formData.append('confmKey', apikey);
+        formData.append('keyword', row[targetColumnNum]);
+        progressChartCont.addOnProgress();
+        return fetch(getUrl, {
+            method: 'POST',
+            body: formData
+        }).then(response => response.text())
+            .then(result => result.slice(1, result.length - 1))
+            .then(result => JSON.parse(result))
+            .then(data => {
+                row[resultColumnNum] = data.results.juso !== null && data.results.juso.length > 0 ? data.results.juso[0][conversionColumn] : '';
+                progressChartCont.addOnComplete();
+            });
+    };
 
     const okayButton = document.getElementById('api_start_button');
     if (okayButton !== null) okayButton.addEventListener('click', () => {
@@ -122,7 +144,7 @@ const progressChartCont = new chartContainer('chart');
                         // maybe await not needed;
                         stack.map(async row => await new Promise(async resolve => {
                             if (row.length - 1 < resultColumnIdx) row.push('');
-                            await coversionFunction(apiKey, row, targetColumnIdx, resultColumnIdx, 'jibunAddr').then(_ => {
+                            await jibunCoversionFunction(apiKey, row, targetColumnIdx, resultColumnIdx, 'jibunAddr').then(_ => {
                                 resolve();
                                 resolveCheckCount++;
                                 if (resolveCheckCount === stackDividCount)
@@ -143,6 +165,8 @@ const progressChartCont = new chartContainer('chart');
         }
     });
 })();
+
+
 
 let pageViewControl = new pageViewController(
     [
