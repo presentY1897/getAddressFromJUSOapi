@@ -117,20 +117,17 @@ const progressChartCont = new chartContainer('chart');
                     return acc;
                 }, []).reduce(async (prePromise: Promise<unknown>, stack: string[][]) => {
                     return await prePromise.then(() => new Promise(resolve => {
-                        console.log('check');
                         const completeResolve = resolve;
                         let resolveCheckCount = 0;
                         stack.map(async row => await new Promise(async resolve => {
                             if (row.length - 1 < resultColumnIdx) row.push('');
                             await coversionFunction(apiKey, row, targetColumnIdx, resultColumnIdx, 'jibunAddr').then(_ => {
-                                console.log('is resolved?');
                                 resolve();
                                 resolveCheckCount++;
                                 if (resolveCheckCount === stackDividCount)
                                     completeResolve();
                             });
                         }));
-                        console.log('end');
                     }));
                 }, Promise.resolve());
             };
