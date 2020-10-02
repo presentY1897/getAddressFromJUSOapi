@@ -7,6 +7,7 @@ import { tabPage } from './pageView/tabPage';
 import { tableViewer } from './tableViewer';
 import { converter } from './converter';
 import { chartContainer } from './chart/chartContainer';
+import { conversionFunction, conversionList } from './conversionList';
 
 const inputFileController = new fileController(document.getElementById('upload_file_list') as HTMLElement);
 const outputFileController = new fileController(document.getElementById('analysis_file_list') as HTMLElement);
@@ -69,53 +70,70 @@ let tableViewElement: tableViewer;
     );
 })();
 
+const conversionFunctionsController = new conversionList();
 const progressChartCont = new chartContainer('chart');
 (function initConverter() {
-    const jibunCoversionFunction = function (apikey: string, row: string[], targetColumnNum: number, resultColumnNum: number, conversionColumn: string) {
-        const getUrl = 'http://www.juso.go.kr/addrlink/addrLinkApiJsonp.do';
+    conversionFunctionsController.addConversionFunction(new conversionFunction(
+        'jibunConversionFunction',
+        function (apikey: string, row: string[], targetColumnNum: number, resultColumnNum: number, conversionColumn: string) {
+            const getUrl = 'http://www.juso.go.kr/addrlink/addrLinkApiJsonp.do';
 
-        let formData = new FormData();
-        formData.append('currentpage', '1');
-        formData.append('countPerPage', '1');
-        formData.append('dataType', 'jsonp');
-        formData.append('resultType', 'json');
-        formData.append('confmKey', apikey);
-        formData.append('keyword', row[targetColumnNum]);
-        progressChartCont.addOnProgress();
-        return fetch(getUrl, {
-            method: 'POST',
-            body: formData
-        }).then(response => response.text())
-            .then(result => result.slice(1, result.length - 1))
-            .then(result => JSON.parse(result))
-            .then(data => {
-                row[resultColumnNum] = data.results.juso !== null && data.results.juso.length > 0 ? data.results.juso[0][conversionColumn] : '';
-                progressChartCont.addOnComplete();
-            });
-    };
-    const roadConversionFunction = function (apikey: string, row: string[], targetColumnNum: number, resultColumnNum: number, conversionColumn: string) {
-        const getUrl = 'http://www.juso.go.kr/addrlink/addrLinkApiJsonp.do';
+            let formData = new FormData();
+            formData.append('currentpage', '1');
+            formData.append('countPerPage', '1');
+            formData.append('dataType', 'jsonp');
+            formData.append('resultType', 'json');
+            formData.append('confmKey', apikey);
+            formData.append('keyword', row[targetColumnNum]);
+            progressChartCont.addOnProgress();
+            return fetch(getUrl, {
+                method: 'POST',
+                body: formData
+            }).then(response => response.text())
+                .then(result => result.slice(1, result.length - 1))
+                .then(result => JSON.parse(result))
+                .then(data => {
+                    row[resultColumnNum] = data.results.juso !== null && data.results.juso.length > 0 ? data.results.juso[0][conversionColumn] : '';
+                    progressChartCont.addOnComplete();
+                });
+        }
+    ));
+    conversionFunctionsController.addConversionFunction(new conversionFunction(
+        'roadConversionFunction',
+        function (apikey: string, row: string[], targetColumnNum: number, resultColumnNum: number, conversionColumn: string) {
+            const getUrl = 'http://www.juso.go.kr/addrlink/addrLinkApiJsonp.do';
 
-        let formData = new FormData();
-        formData.append('currentpage', '1');
-        formData.append('countPerPage', '1');
-        formData.append('dataType', 'jsonp');
-        formData.append('resultType', 'json');
-        formData.append('confmKey', apikey);
-        formData.append('keyword', row[targetColumnNum]);
-        progressChartCont.addOnProgress();
-        return fetch(getUrl, {
-            method: 'POST',
-            body: formData
-        }).then(response => response.text())
-            .then(result => result.slice(1, result.length - 1))
-            .then(result => JSON.parse(result))
-            .then(data => {
-                row[resultColumnNum] = data.results.juso !== null && data.results.juso.length > 0 ? data.results.juso[0][conversionColumn] : '';
-                progressChartCont.addOnComplete();
-            });
-    };
+            let formData = new FormData();
+            formData.append('currentpage', '1');
+            formData.append('countPerPage', '1');
+            formData.append('dataType', 'jsonp');
+            formData.append('resultType', 'json');
+            formData.append('confmKey', apikey);
+            formData.append('keyword', row[targetColumnNum]);
+            progressChartCont.addOnProgress();
+            return fetch(getUrl, {
+                method: 'POST',
+                body: formData
+            }).then(response => response.text())
+                .then(result => result.slice(1, result.length - 1))
+                .then(result => JSON.parse(result))
+                .then(data => {
+                    row[resultColumnNum] = data.results.juso !== null && data.results.juso.length > 0 ? data.results.juso[0][conversionColumn] : '';
+                    progressChartCont.addOnComplete();
+                });
+        }
+    ));
 
+    const conversionTypeSelector = document.getElementById('conversionSelector') as HTMLSelectElement;
+    conversionTypeSelector.addEventListener('change', () => {
+        if (conversionTypeSelector.value == '도로명찾기') { // change as more functionally
+            conversionFunctionsController.setTarget('roadConversionFunction');
+        } else if (conversionTypeSelector.value == '주소찾기') {
+            conversionFunctionsController.setTarget('jibunConversionFunction');
+        } else { // add none type select option reaction
+            conversionFunctionsController.setTarget('jibunConversionFunction');
+        }
+    });
     const okayButton = document.getElementById('api_start_button');
     if (okayButton !== null) okayButton.addEventListener('click', () => {
         const apiKeyInput = document.getElementById('address_api_key_input') as HTMLInputElement;
@@ -144,12 +162,15 @@ const progressChartCont = new chartContainer('chart');
                         // maybe await not needed;
                         stack.map(async row => await new Promise(async resolve => {
                             if (row.length - 1 < resultColumnIdx) row.push('');
-                            await jibunCoversionFunction(apiKey, row, targetColumnIdx, resultColumnIdx, 'jibunAddr').then(_ => {
-                                resolve();
-                                resolveCheckCount++;
-                                if (resolveCheckCount === stackDividCount)
-                                    completeResolve();
-                            });
+                            const conversionFuncObj = conversionFunctionsController.target();
+                            if (conversionFuncObj !== null) {
+                                await conversionFuncObj.func(apiKey, row, targetColumnIdx, resultColumnIdx, 'jibunAddr').then((_: any) => {
+                                    resolve();
+                                    resolveCheckCount++;
+                                    if (resolveCheckCount === stackDividCount)
+                                        completeResolve();
+                                });
+                            }
                         }));
                     }));
                 }, Promise.resolve());
