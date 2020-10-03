@@ -124,6 +124,32 @@ const progressChartCont = new chartContainer('chart');
         }
     ));
 
+    const getCoordinateAPI = new conversionFunction(
+        'coordinateFunction',
+        function (apikey: string, row: string[], targetColumnNum: number, resultColumnNum: number, conversionColumn: string) {
+            const getUrl = 'http://www.juso.go.kr/addrlink/addrCoordApiJsonp.do';
+
+            let formData = new FormData();
+            formData.append('currentpage', '1');
+            formData.append('countPerPage', '1');
+            formData.append('dataType', 'jsonp');
+            formData.append('resultType', 'json');
+            formData.append('confmKey', apikey);
+            formData.append('keyword', row[targetColumnNum]);
+            progressChartCont.addOnProgress();
+            return fetch(getUrl, {
+                method: 'POST',
+                body: formData
+            }).then(response => response.text())
+                .then(result => result.slice(1, result.length - 1))
+                .then(result => JSON.parse(result))
+                .then(data => {
+                    row[resultColumnNum] = data.results.juso !== null && data.results.juso.length > 0 ? data.results.juso[0][conversionColumn] : '';
+                    progressChartCont.addOnComplete();
+                });
+        }
+    )
+
     const conversionTypeSelector = document.getElementById('conversionSelector') as HTMLSelectElement;
     conversionTypeSelector.addEventListener('change', () => {
         if (conversionTypeSelector.value == '도로명찾기') { // change as more functionally
@@ -135,6 +161,7 @@ const progressChartCont = new chartContainer('chart');
         }
     });
     const okayButton = document.getElementById('api_start_button');
+    const checkGetCoordinate = document.getElementById('positionApiCallCheck') as HTMLInputElement;
     if (okayButton !== null) okayButton.addEventListener('click', () => {
         const apiKeyInput = document.getElementById('address_api_key_input') as HTMLInputElement;
         let apiKey = apiKeyInput !== null ? apiKeyInput.value as string : '';
