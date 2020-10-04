@@ -172,7 +172,8 @@ const progressChartCont = new chartContainer('chart');
     }
     if (okayButton !== null) okayButton.addEventListener('click', () => {
         const apiKeyInput = document.getElementById('address_api_key_input') as HTMLInputElement;
-        let apiKey = apiKeyInput !== null ? apiKeyInput.value as string : '';
+        let apiKey = apiKeyInput !== null ? apiKeyInput.value as string : 'U01TX0FVVEgyMDIwMTAwNDE2MjEzMDExMDI1MTA=';
+        const coordinateApiKey = 'U01TX0FVVEgyMDIwMTAwNDE2MjIzNDExMDI1MTE=';
         let file = inputFileController.targetFile as csvFile;
 
         if (apiKey !== '' && file !== null) {
