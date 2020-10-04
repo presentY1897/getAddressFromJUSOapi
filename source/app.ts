@@ -162,6 +162,14 @@ const progressChartCont = new chartContainer('chart');
     });
     const okayButton = document.getElementById('api_start_button');
     const checkGetCoordinate = document.getElementById('positionApiCallCheck') as HTMLInputElement;
+    const getCoordinateAPIInput = document.getElementById('positionApiGroup') as HTMLDivElement;
+    if (checkGetCoordinate !== null && getCoordinateAPIInput !== null) {
+        checkGetCoordinate.addEventListener('change', () => {
+            checkGetCoordinate.checked ?
+                getCoordinateAPIInput.style.display = '' :
+                getCoordinateAPIInput.style.display = 'none';
+        })
+    }
     if (okayButton !== null) okayButton.addEventListener('click', () => {
         const apiKeyInput = document.getElementById('address_api_key_input') as HTMLInputElement;
         let apiKey = apiKeyInput !== null ? apiKeyInput.value as string : '';
