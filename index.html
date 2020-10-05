@@ -52,7 +52,7 @@
                             <button class="input-group-text" id="acceptFile">확인</button>
                         </div>
                     </div>
-                    <table id="selected_file_table" class='table'></table>
+                    <div id="selected_file_table" class='table'></div>
                     <div class="row">
                         <div class="col">업로드 파일 리스트
                             <ul class='list-group' id="upload_file_list"></ul>
@@ -60,6 +60,9 @@
                         <div class="col">분석 파일 리스트
                             <ul id="analysis_file_list" class='list-group'></ul>
                         </div>
+                    </div>
+                    <div>
+
                     </div>
                 </div>
                 <div id='work_page' class='container-lg d-none'>
@@ -94,6 +97,16 @@
                         <input id='position_api_key_input' class='form-control' />
                     </div>
                     <div>
+                        <div class='dropdown'>
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                분석할 컬럼
+                            </button>
+                            <div id='targetColumnDropdown' class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            </div>
+                        </div>
+                    </div>
+                    <div>
                         <button id="api_start_button" type='button' class='btn btn-secondary btn-lg'>변환 시작!</button>
                         <button id="download_result_button" type='button'
                             class='btn btn-secondary btn-lg'>다운로드!</button>
@@ -111,10 +124,7 @@
         integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
-    <script src='src/search.js'></script>
-    <script src='src/file_load.js'></script>
-    <script src='src/conversion.js'></script>
-    <script src='src/page.js'></script>
+    <script src='src/js/bundle.js'></script>
 </body>
 
 </html>

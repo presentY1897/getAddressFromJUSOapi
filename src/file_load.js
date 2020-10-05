@@ -3,6 +3,28 @@ let fileDataController = {
     currentFile: null,
     isCurrentFile: checkFile => this.currentFile == checkFile
 };
+class FileListController {
+    constructor() {
+        this.files = files ? files : [];
+        this.selectedFiles = [];
+    }
+    get fileList() {
+        return this.files;
+    }
+    get selectedList() {
+        return this.selectedFiles;
+    }
+    addSelectedFile(file) {
+        if (this.selectedFiles.findIndex(file) == -1) this.selectedFiles.push(file);
+    }
+    removeSelectedFile(file) {
+        var findIndex = this.selectedFiles.findIndex(file);
+        if (findIndex != -1) this.selectedFiles.splice(findIndex, 1);
+    }
+    clearSelectedFiles() {
+        this.selectedFiles = [];
+    }
+}
 class File {
     constructor(name, type = 'uploaded') {
         this.name = name;
@@ -40,7 +62,11 @@ class File {
         this.data = data;
         if (this.isFirstHeader) this.header = data.splice(0, 1)[0];
     }
+    setCurrentFile() {
+        fileDataController.currentFile = this;
+    }
 }
+var mainFileController = new FileListController();
 (() => {
     let reader = new this.FileReader();
     reader.onload = function () {
@@ -59,6 +85,11 @@ class File {
 
             ([...$('#inputFile')[0].files]).forEach(uploadFile => {
                 let file = new File(uploadFile.name);
+
+                (function insertFileToController() {
+                    mainFileController.addSelectedFile(file);
+                })();
+
                 fileDataController.files.push(file);
                 fileDataController.currentFile = file;
                 reader.readAsText(uploadFile, "euc-kr");
@@ -138,15 +169,15 @@ class File {
 
             var fileListElement = document.createElement('li');
             fileListElement.setAttribute('class', 'list-group-item');
-            fileListElement.dataset.file = file;
             fileListElement.innerText = file.name;
+            file.htmlElement = fileListElement;
 
             $(fileListElement).addClass('active');
             $('#upload_file_list').children().each((_, target) => $(target).removeClass('active'));
             $('#upload_file_list')[0].append(fileListElement);
-
-            $(fileListElement).on('click', () => {
-                let currentFile = fileListElement.dataset.file;
+            var elementClickEvent = function () {
+                file.setCurrentFile();
+                let currentFile = fileDataController.currentFile;
                 if (fileDataController.currentFile == currentFile) {
                     $(fileListElement).removeClass('active');
                     fileDataController.currentFile = null;
@@ -155,7 +186,24 @@ class File {
                     $(fileListElement).addClass('active');
                     fileDataController.currentFile = currentFile;
                 };
-            });
+
+                var changeAsColumns = function (columns) {
+                    var comboBox = document.getElementById('targetColumnDropdown');
+                    var createColumnElement = function (name, idx) {
+                        var element = document.createElement('a');
+                        element.classList.add('dropdown-item');
+                        element.innerText = +idx + '. ' + name;
+                        element.dataset.id = idx;
+                        element.addEventListener('click', _ => {
+                            file.targetColumnId = idx;
+                        });
+                        return element;
+                    };
+                    columns.forEach((column, idx) => comboBox.appendChild(createColumnElement(column, idx)));
+                };
+                changeAsColumns(file.previewData.header);
+            }
+            $(fileListElement).on('click', elementClickEvent);
         };
     });
 })();

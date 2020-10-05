@@ -1,8 +1,20 @@
+class conversionController {
+    constructor() {
+
+    }
+    get selectFile() {
+        return this.selectFile;
+    }
+    set selectFile(file) {
+        this.selectFile = file;
+    }
+}
 (() => {
     $('#api_start_button').on('click', () => {
         var conversionSelect = $('#conversionSelector').val();
         fileDataController.currentFile.makeFullRow(); // todo: 한꺼번에 하자
-        let data = fileDataController.currentFile.data;
+        let file = fileDataController.currentFile;
+        let data = file.data;
         let isCallPositionApi = document.getElementById('positionApiCallCheck').checked;
         let addressApiKey = $('#address_api_key_input').val();
         let positionApiKey = $('#position_api_key_input').val();
@@ -33,7 +45,7 @@
                 },
                 options: {}
             });
-            chartDataUpdate = function(data) {
+            chartDataUpdate = function (data) {
                 data.forEach((element, index) => {
                     chart.data.datasets[0].data[index] = element;
                 });
@@ -57,7 +69,7 @@
             let chartUpdater = setInterval(() => {
                 chartDataUpdate([data.length - stackCount, stackCount - convsersionCount, convsersionCount - failCount, failCount]);
             }, 150);
-            const callAddressPromise = function(rows) {
+            const callAddressPromise = function (rows) {
                 return new Promise((resolve) => {
                     rows.forEach(address => {
                         callJusoAPI(
@@ -66,14 +78,16 @@
                                 countPerPage: 1,
                                 resultType: 'json',
                                 confmKey: addressApiKey,
-                                keyword: address[1]
+                                keyword: address[file.targetColumnId]
                             },
                             e => {
                                 convsersionCount++;
                                 if (typeof e.results.juso[0] != 'undefined') {
                                     if (conversionSelect == '도로명찾기') address.push(e.results.juso[0].roadAddr);
                                     else if (conversionSelect == '주소찾기') address.push(e.results.juso[0].jibunAddr);
-                                } else { failCount++; };
+                                } else {
+                                    failCount++;
+                                };
                                 if (isCallPositionApi) {
                                     var result = e.results.juso[0];
                                     if (result != undefined)
@@ -129,7 +143,7 @@
             crossDomain: true,
             data: data,
             success: successCallback,
-            error: function(e) {}
+            error: function (e) {}
         });
     }
 })();

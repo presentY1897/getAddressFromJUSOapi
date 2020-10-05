@@ -1,0 +1,29 @@
+{
+  "name": "getaddressfromjusoapi",
+  "version": "1.0.0",
+  "description": "### 개요",
+  "main": "index.js",
+  "dependencies": {
+    "@types/chart.js": "^2.9.24",
+    "chart.js": "^2.9.3"
+  },
+  "devDependencies": {
+    "babel-loader": "^8.1.0",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/presentY1897/getAddressFromJUSOapi.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/presentY1897/getAddressFromJUSOapi/issues"
+  },
+  "homepage": "https://github.com/presentY1897/getAddressFromJUSOapi#readme"
+}

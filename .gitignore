@@ -1,0 +1,4 @@
+node_modules/
+tsResult/
+src/js/bundle.js
+src/js/bundle.js.map
