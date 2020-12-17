@@ -186,12 +186,13 @@ const progressChartCont = new chartContainer('chart');
                     targetColumnIdx = parseInt(targetColumnSelectElement.dataset.id);
                 let resultColumnIdx = file.data.columns.length - 1;
                 const stackDividCount = 100;
-                file.data.rows.reduce((acc: string[][][], curr: string[], idx: number): string[][][] => {
+                const stackedData = file.data.rows.reduce((acc: string[][][], curr: string[], idx: number): string[][][] => {
                     idx % stackDividCount == 0 ? acc.push([[]]) : '';
                     const lastAcc = acc[acc.length - 1];
                     lastAcc.push(curr);
                     return acc;
-                }, []).reduce(async (prePromise: Promise<unknown>, stack: string[][]) => {
+                }, []);
+                stackedData.reduce(async (prePromise: Promise<unknown>, stack: string[][]): Promise<unknown> => {
                     return await prePromise.then(() => new Promise(resolve => {
                         const completeResolve = resolve;
                         let resolveCheckCount = 0;
