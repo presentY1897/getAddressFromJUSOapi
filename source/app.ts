@@ -172,8 +172,8 @@ const progressChartCont = new chartContainer('chart');
     }
     if (okayButton !== null) okayButton.addEventListener('click', () => {
         const apiKeyInput = document.getElementById('address_api_key_input') as HTMLInputElement;
-        let apiKey = apiKeyInput !== null ? apiKeyInput.value as string : 'U01TX0FVVEgyMDIwMTAwNDE2MjEzMDExMDI1MTA=';
-        const coordinateApiKey = 'U01TX0FVVEgyMDIwMTAwNDE2MjIzNDExMDI1MTE=';
+        let apiKey = apiKeyInput !== null ? apiKeyInput.value as string : 'U01TX0FVVEgyMDIwMTIxMzAwMDM1NjExMDU0MjI=';
+        const coordinateApiKey = 'U01TX0FVVEgyMDIwMTIxMzAwMDYyODExMDU0MjM=';
         let file = inputFileController.targetFile as csvFile;
 
         if (apiKey !== '' && file !== null) {
@@ -186,12 +186,13 @@ const progressChartCont = new chartContainer('chart');
                     targetColumnIdx = parseInt(targetColumnSelectElement.dataset.id);
                 let resultColumnIdx = file.data.columns.length - 1;
                 const stackDividCount = 100;
-                file.data.rows.reduce((acc: string[][][], curr: string[], idx: number): string[][][] => {
+                const stackedData = file.data.rows.reduce((acc: string[][][], curr: string[], idx: number): string[][][] => {
                     idx % stackDividCount == 0 ? acc.push([[]]) : '';
                     const lastAcc = acc[acc.length - 1];
                     lastAcc.push(curr);
                     return acc;
-                }, []).reduce(async (prePromise: Promise<unknown>, stack: string[][]) => {
+                }, []);
+                stackedData.reduce(async (prePromise: Promise<unknown>, stack: string[][]): Promise<unknown> => {
                     return await prePromise.then(() => new Promise(resolve => {
                         const completeResolve = resolve;
                         let resolveCheckCount = 0;
