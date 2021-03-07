@@ -202,10 +202,8 @@ const progressChartCont = new chartContainer('chart');
                             const conversionFuncObj = conversionFunctionsController.target();
                             if (conversionFuncObj !== null) {
                                 await conversionFuncObj.func(apiKey, row, targetColumnIdx, resultColumnIdx, 'jibunAddr').then((_: any) => {
-                                    resolve();
                                     resolveCheckCount++;
-                                    if (resolveCheckCount === stackDividCount)
-                                        completeResolve();
+                                    if (resolveCheckCount === stackDividCount) { }
                                 });
                             }
                         }));
