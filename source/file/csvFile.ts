@@ -1,4 +1,3 @@
-import { table } from './table';
 import { classFile } from './classFile';
 
 class csvFile extends classFile {

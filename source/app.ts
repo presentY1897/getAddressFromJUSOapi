@@ -75,7 +75,7 @@ const progressChartCont = new chartContainer('chart');
 (function initConverter() {
     conversionFunctionsController.addConversionFunction(new conversionFunction(
         'jibunConversionFunction',
-        function (apikey: string, row: string[], targetColumnNum: number, resultColumnNum: number, conversionColumn: string) {
+        (apikey: string, row: string[], targetColumnNum: number, resultColumnNum: number, conversionColumn: string) => {
             const getUrl = 'https://www.juso.go.kr/addrlink/addrLinkApiJsonp.do';
 
             let formData = new FormData();
@@ -100,7 +100,7 @@ const progressChartCont = new chartContainer('chart');
     ));
     conversionFunctionsController.addConversionFunction(new conversionFunction(
         'roadConversionFunction',
-        function (apikey: string, row: string[], targetColumnNum: number, resultColumnNum: number, conversionColumn: string) {
+        (apikey: string, row: string[], targetColumnNum: number, resultColumnNum: number, conversionColumn: string) => {
             const getUrl = 'https://www.juso.go.kr/addrlink/addrLinkApiJsonp.do';
 
             let formData = new FormData();
@@ -126,7 +126,7 @@ const progressChartCont = new chartContainer('chart');
 
     const getCoordinateAPI = new conversionFunction(
         'coordinateFunction',
-        function (apikey: string, row: string[], targetColumnNum: number, resultColumnNum: number, conversionColumn: string) {
+        (apikey: string, row: string[], targetColumnNum: number, resultColumnNum: number, conversionColumn: string) => {
             const getUrl = 'https://www.juso.go.kr/addrlink/addrCoordApiJsonp.do';
 
             let formData = new FormData();
@@ -202,10 +202,10 @@ const progressChartCont = new chartContainer('chart');
                             const conversionFuncObj = conversionFunctionsController.target();
                             if (conversionFuncObj !== null) {
                                 await conversionFuncObj.func(apiKey, row, targetColumnIdx, resultColumnIdx, 'jibunAddr').then((_: any) => {
-                                    resolve();
+                                    // resolve();
                                     resolveCheckCount++;
-                                    if (resolveCheckCount === stackDividCount)
-                                        completeResolve();
+                                    // if (resolveCheckCount === stackDividCount)
+                                    //     completeResolve();
                                 });
                             }
                         }));
