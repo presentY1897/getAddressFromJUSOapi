@@ -5,7 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "@types/chart.js": "^2.9.24",
-    "chart.js": "^2.9.3"
+    "chart.js": "^2.9.4"
   },
   "devDependencies": {
     "babel-loader": "^8.1.0",
